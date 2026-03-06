@@ -175,12 +175,15 @@ const SchemesMatcher = () => {
       <div className="min-h-screen py-12 px-4" style={{ backgroundColor: '#FAF7F0' }}>
         <div className="max-w-6xl mx-auto">
           {/* Top Score Banner */}
-          <div 
+          <motion.div 
             className="mb-8 p-6 rounded-2xl shadow-lg text-center"
             style={{ 
               background: 'linear-gradient(135deg, #2D6A4F 0%, #1B4332 100%)',
               border: '3px solid #D4A017'
             }}
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
           >
             <p 
               className="text-2xl font-bold mb-2" 
@@ -197,11 +200,17 @@ const SchemesMatcher = () => {
             <p className="text-sm mt-2" style={{ color: '#E8F4EA' }}>
               You are eligible for these schemes!
             </p>
-          </div>
+          </motion.div>
 
-          <h1 className="text-4xl font-bold text-center mb-8" style={{ color: '#1B4332' }}>
+          <motion.h1 
+            className="text-4xl font-bold text-center mb-8" 
+            style={{ color: '#1B4332' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
             Matched Schemes
-          </h1>
+          </motion.h1>
 
           {/* Scheme Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
@@ -223,7 +232,12 @@ const SchemesMatcher = () => {
           </div>
 
           {/* WhatsApp Share Button */}
-          <div className="flex justify-center mb-8">
+          <motion.div 
+            className="flex justify-center mb-8"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
             <button
               onClick={() => {
                 const message = `நான் VazhiKaatti மூலம் ${score}/100 மதிப்பெண் பெற்றேன்! இந்த திட்டங்களுக்கு தகுதியானவர்கள் இப்போதே விண்ணப்பிக்கலாம்! 🌾`;
@@ -239,10 +253,15 @@ const SchemesMatcher = () => {
               <Share2 size={24} />
               <span>WhatsApp இல் பகிர்</span>
             </button>
-          </div>
+          </motion.div>
 
           {/* Contact Bank Officer Button */}
-          <div className="flex justify-center">
+          <motion.div 
+            className="flex justify-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+          >
             <button
               onClick={() => navigate('/contact')}
               className="flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
@@ -255,7 +274,7 @@ const SchemesMatcher = () => {
               <Phone size={24} />
               <span>வங்கி அதிகாரியை தொடர்பு கொள்ளுங்கள்</span>
             </button>
-          </div>
+          </motion.div>
         </div>
       </div>
     </AnimatedPage>
