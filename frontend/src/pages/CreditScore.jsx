@@ -256,7 +256,12 @@ const CreditScore = () => {
           
           {/* Tamil Explanation */}
           {(scoreData.explanation || scoreData.tamil_explanation) && (
-            <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
+            <motion.div 
+              className="bg-white rounded-3xl shadow-lg p-8 mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+            >
               <h2 
                 className="text-2xl font-bold mb-4 text-center" 
                 style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
@@ -269,7 +274,7 @@ const CreditScore = () => {
               >
                 {scoreData.tamil_explanation || scoreData.explanation}
               </p>
-            </div>
+            </motion.div>
           )}
           
           {/* Contributing Factors */}
