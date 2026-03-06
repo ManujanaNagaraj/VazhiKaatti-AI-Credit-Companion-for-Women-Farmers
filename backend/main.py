@@ -5,6 +5,7 @@ AI Credit Companion for Women Farmers in Tamil Nadu
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 import uvicorn
 import joblib
 import os
@@ -24,11 +25,32 @@ from models import (
 )
 from schemes import get_schemes_by_score, format_scheme_for_api
 
-# Initialize FastAPI app
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan event handler for startup and shutdown"""
+    # Startup
+    print("="*70)
+    print("🌾 VazhiKaatti - AI Credit Companion for Women Farmers")
+    print("="*70)
+    print("🚀 Server starting...")
+    print("📍 API Documentation: http://localhost:8000/docs")
+    print("🌐 CORS enabled for: http://localhost:3000")
+    print("✅ Ready to empower Tamil Nadu women farmers!")
+    print("="*70)
+    yield
+    # Shutdown
+    print("\n" + "="*70)
+    print("👋 VazhiKaatti server shutting down...")
+    print("="*70)
+
+
+# Initialize FastAPI app with lifespan
 app = FastAPI(
     title="VazhiKaatti API",
     description="AI Credit Companion for Women Farmers in Tamil Nadu",
-    version="2.0.0"
+    version="2.0.0",
+    lifespan=lifespan
 )
 
 # CORS configuration - Allow requests from React frontend
@@ -39,20 +61,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# Startup event
-@app.on_event("startup")
-async def startup_event():
-    """Print startup message"""
-    print("="*70)
-    print("🌾 VazhiKaatti - AI Credit Companion for Women Farmers")
-    print("="*70)
-    print("🚀 Server starting...")
-    print("📍 API Documentation: http://localhost:8000/docs")
-    print("🌐 CORS enabled for: http://localhost:3000")
-    print("✅ Ready to empower Tamil Nadu women farmers!")
-    print("="*70)
 
 
 @app.get("/")
@@ -315,4 +323,4 @@ if __name__ == "__main__":
     print("\n" + "="*70)
     print("Starting VazhiKaatti Backend Server...")
     print("="*70 + "\n")
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
