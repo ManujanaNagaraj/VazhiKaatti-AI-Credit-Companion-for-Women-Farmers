@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, TrendingUp, CheckCircle, Clock, FileCheck, AlertCircle } from 'lucide-react';
+import AnimatedPage from '../components/AnimatedPage';
 
 const OfficerDashboard = () => {
   const [stats, setStats] = useState({
@@ -71,7 +72,8 @@ const OfficerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <AnimatedPage>
+      <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
