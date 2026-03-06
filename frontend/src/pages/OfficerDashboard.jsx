@@ -228,6 +228,7 @@ const OfficerDashboard = () => {
         </div>
       </main>
     </div>
+    </AnimatedPage>
   );
 };
 
