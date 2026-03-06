@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Check } from 'lucide-react';
 import axios from 'axios';
 import AnimatedPage from '../components/AnimatedPage';
 
@@ -45,6 +46,38 @@ const SchemeCard = ({ scheme }) => {
           {scheme.tamil_description || scheme.description_tamil || 
            'இந்த திட்டம் பெண் விவசாயிகளுக்கு நிதி உதவி வழங்குகிறது. விவசாய உபகரணங்கள் வாங்க மற்றும் பயிர் சாகுபடிக்கு உதவுகிறது.'}
         </p>
+      </div>
+
+      {/* Required Documents Checklist */}
+      <div className="mb-6">
+        <h4 
+          className="text-lg font-bold mb-3" 
+          style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+        >
+          தேவையான ஆவணங்கள்:
+        </h4>
+        <div className="space-y-2">
+          {(scheme.documents || scheme.required_documents || [
+            'ஆதார் அட்டை',
+            'நில பதிவு ஆவணங்கள்',
+            'வங்கி கணக்கு விவரங்கள்'
+          ]).map((doc, idx) => (
+            <div key={idx} className="flex items-start gap-2">
+              <div 
+                className="mt-1 rounded-full p-1"
+                style={{ backgroundColor: '#D4F1DD' }}
+              >
+                <Check size={16} style={{ color: '#27AE60' }} />
+              </div>
+              <p 
+                className="text-sm flex-1" 
+                style={{ color: '#2D6A4F', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+              >
+                {doc}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
