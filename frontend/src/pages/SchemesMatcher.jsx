@@ -35,6 +35,17 @@ const SchemeCard = ({ scheme }) => {
           Maximum Benefit
         </p>
       </div>
+
+      {/* Tamil Description */}
+      <div className="mb-6">
+        <p 
+          className="text-base leading-relaxed" 
+          style={{ color: '#2D6A4F', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+        >
+          {scheme.tamil_description || scheme.description_tamil || 
+           'இந்த திட்டம் பெண் விவசாயிகளுக்கு நிதி உதவி வழங்குகிறது. விவசாய உபகரணங்கள் வாங்க மற்றும் பயிர் சாகுபடிக்கு உதவுகிறது.'}
+        </p>
+      </div>
     </div>
   );
 };
