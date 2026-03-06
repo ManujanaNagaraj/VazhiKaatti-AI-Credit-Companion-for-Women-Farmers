@@ -61,10 +61,34 @@ const CreditScore = () => {
   const location = useLocation();
   const [scoreData, setScoreData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [displayScore, setDisplayScore] = useState(0);
 
   useEffect(() => {
     loadScoreData();
   }, []);
+
+  useEffect(() => {
+    // Count-up animation for score
+    if (scoreData) {
+      const targetScore = scoreData.score || scoreData.credit_score || 74;
+      const duration = 2000; // 2 seconds
+      const steps = 60;
+      const increment = targetScore / steps;
+      let current = 0;
+      
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= targetScore) {
+          setDisplayScore(targetScore);
+          clearInterval(timer);
+        } else {
+          setDisplayScore(Math.floor(current));
+        }
+      }, duration / steps);
+      
+      return () => clearInterval(timer);
+    }
+  }, [scoreData]);
 
   const loadScoreData = () => {
     // Try to get score data from location.state first
@@ -126,7 +150,7 @@ const CreditScore = () => {
           
           {/* Gauge */}
           <div className="bg-white rounded-3xl shadow-2xl p-12 mb-8">
-            <CircularGauge score={scoreData.score || scoreData.credit_score || 74} />
+            <CircularGauge score={displayScore} />
             <p 
               className="text-center mt-4 text-xl font-semibold" 
               style={{ color: '#6B4226', fontFamily: 'Noto Sans Tamil, sans-serif' }}
