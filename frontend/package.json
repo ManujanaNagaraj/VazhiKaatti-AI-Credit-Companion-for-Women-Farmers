@@ -4,15 +4,17 @@
   "description": "VazhiKaatti - AI Credit Companion for Women Farmers",
   "private": true,
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "axios": "^1.6.2",
+    "canvas-confetti": "^1.9.4",
+    "framer-motion": "^10.18.0",
+    "lucide-react": "^0.294.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.0",
-    "axios": "^1.6.2",
+    "react-router-dom": "^6.30.3",
     "recharts": "^2.10.3",
-    "lucide-react": "^0.294.0",
-    "@headlessui/react": "^1.7.17",
     "tailwindcss": "^3.3.5",
-    "framer-motion": "^10.16.5"
+    "which": "^6.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -21,9 +23,9 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "react-scripts": "5.0.1",
     "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32"
+    "postcss": "^8.4.32",
+    "react-scripts": "^5.0.1"
   },
   "eslintConfig": {
     "extends": [
