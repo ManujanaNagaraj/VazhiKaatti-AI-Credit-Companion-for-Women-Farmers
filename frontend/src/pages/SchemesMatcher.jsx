@@ -56,8 +56,22 @@ const SchemesMatcher = () => {
   if (loading) {
     return (
       <AnimatedPage>
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FAF7F0' }}>
-          <p style={{ color: '#1B4332' }}>Loading...</p>
+        <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: '#FAF7F0' }}>
+          <div className="relative w-20 h-20 mb-4">
+            <div 
+              className="absolute inset-0 rounded-full border-4 border-t-transparent animate-spin"
+              style={{ borderColor: '#D4A017', borderTopColor: 'transparent' }}
+            />
+          </div>
+          <p 
+            className="text-xl font-semibold" 
+            style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+          >
+            திட்டங்களை ஏற்றுகிறது...
+          </p>
+          <p className="text-sm mt-2" style={{ color: '#2D6A4F' }}>
+            Loading schemes...
+          </p>
         </div>
       </AnimatedPage>
     );
