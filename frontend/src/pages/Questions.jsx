@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Loader2 } from 'lucide-react';
 import VoiceInput from '../components/VoiceInput';
 import AnimatedPage from '../components/AnimatedPage';
+import axios from 'axios';
 
 const Questions = () => {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [currentAnswer, setCurrentAnswer] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const questions = [
     {
@@ -66,28 +69,44 @@ const Questions = () => {
   };
 
   const submitToAPI = async (finalAnswers) => {
+    setSubmitting(true);
     try {
       // Get profile data from localStorage
       const name = localStorage.getItem('farmer_name') || '';
-      const age = localStorage.getItem('farmer_age') || '';
+      const age = parseInt(localStorage.getItem('farmer_age') || '0');
       const village = localStorage.getItem('farmer_village') || '';
       const district = localStorage.getItem('farmer_district') || '';
 
-      // Combine profile and answers
-      const payload = {
-        farmer_profile: { name, age, village, district },
-        answers: finalAnswers
+      // Prepare mock features for API (these should be parsed from answers in production)
+      const features = {
+        years_of_farming: parseFloat(finalAnswers.years_farming) || 5,
+        crop_type: 0, // Rice (0=Rice, 1=Vegetables, 2=Fruits, 3=Mixed)
+        annual_income_inr: parseFloat(finalAnswers.annual_income) || 50000,
+        land_size_acres: 2.5,
+        education_level: 1, // Primary
+        family_size: 4,
+        livestock_owned: 2,
+        loan_history: 1, // Good
+        savings_amount: 10000,
+        group_membership: finalAnswers.shg_member?.toLowerCase() === 'yes' || finalAnswers.shg_member === 'ஆம்' ? 1 : 0,
+        irrigation_access: 1, // Well
+        market_access: 1 // Local market
       };
 
-      // TODO: Call predict-score API
-      console.log('Submitting to API:', payload);
+      // Call predict-score API
+      const response = await axios.post('http://localhost:8000/predict-score', features);
       
-      // For now, navigate to score page
+      // Save score data and answers to localStorage
+      localStorage.setItem('creditScore', JSON.stringify(response.data));
       localStorage.setItem('questionnaireAnswers', JSON.stringify(finalAnswers));
-      navigate('/score');
+      
+      // Navigate to score page
+      navigate('/score', { state: { scoreData: response.data } });
     } catch (error) {
       console.error('Error submitting answers:', error);
-      alert('Error submitting answers. Please try again.');
+      alert('Error calculating score. Please try again. / மதிப்பெண் கணக்கிடுவதில் பிழை. மீண்டும் முயற்சிக்கவும்.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -150,14 +169,23 @@ const Questions = () => {
             {/* Next Button */}
             <button
               onClick={handleNext}
-              className="w-full mt-8 py-4 rounded-lg font-bold text-xl transition-all hover:scale-105"
+              disabled={submitting}
+              className="w-full mt-8 py-4 rounded-lg font-bold text-xl transition-all hover:scale-105 flex items-center justify-center space-x-2"
               style={{ 
-                backgroundColor: '#D4A017', 
+                backgroundColor: submitting ? '#6B4226' : '#D4A017', 
                 color: '#FAF7F0',
-                fontFamily: 'Noto Sans Tamil, sans-serif'
+                fontFamily: 'Noto Sans Tamil, sans-serif',
+                opacity: submitting ? 0.7 : 1
               }}
             >
-              {currentQuestion < questions.length - 1 ? 'அடுத்தது →' : 'முடி →'}
+              {submitting ? (
+                <>
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                  <span>சமர்ப்பிக்கிறது...</span>
+                </>
+              ) : (
+                <span>{currentQuestion < questions.length - 1 ? 'அடுத்தது →' : 'முடி →'}</span>
+              )}
             </button>
           </motion.div>
         </div>
