@@ -155,9 +155,12 @@ const FarmerProfile = () => {
               <h3 className="text-xl font-semibold" style={{ color: '#1B4332' }}>
                 Identity Information
               </h3>
-              <div className="flex items-center space-x-1" style={{ color: '#2D6A4F' }}>
-                <CheckCircle className="h-5 w-5" />
-                <span className="text-sm font-semibold">✓ Verified</span>
+              <div 
+                className="flex items-center space-x-1 px-3 py-1 rounded-full"
+                style={{ backgroundColor: '#FFE5B4', color: '#1B4332' }}
+              >
+                <CheckCircle className="h-5 w-5" style={{ color: '#D4A017' }} />
+                <span className="text-sm font-bold">✓ Verified</span>
               </div>
             </div>
             
@@ -201,9 +204,12 @@ const FarmerProfile = () => {
               {fetchingLand ? (
                 <Loader2 className="h-5 w-5 animate-spin" style={{ color: '#2D6A4F' }} />
               ) : (
-                <div className="flex items-center space-x-1" style={{ color: '#2D6A4F' }}>
-                  <CheckCircle className="h-5 w-5" />
-                  <span className="text-sm font-semibold">✓ Verified</span>
+                <div 
+                  className="flex items-center space-x-1 px-3 py-1 rounded-full"
+                  style={{ backgroundColor: '#FFE5B4', color: '#1B4332' }}
+                >
+                  <CheckCircle className="h-5 w-5" style={{ color: '#D4A017' }} />
+                  <span className="text-sm font-bold">✓ Verified</span>
                 </div>
               )}
             </div>
@@ -242,9 +248,12 @@ const FarmerProfile = () => {
               <h3 className="text-xl font-semibold" style={{ color: '#1B4332' }}>
                 Government Schemes / அரசு திட்டங்கள்
               </h3>
-              <div className="flex items-center space-x-1" style={{ color: '#2D6A4F' }}>
-                <CheckCircle className="h-5 w-5" />
-                <span className="text-sm font-semibold">✓ Verified</span>
+              <div 
+                className="flex items-center space-x-1 px-3 py-1 rounded-full"
+                style={{ backgroundColor: '#FFE5B4', color: '#1B4332' }}
+              >
+                <CheckCircle className="h-5 w-5" style={{ color: '#D4A017' }} />
+                <span className="text-sm font-bold">✓ Verified</span>
               </div>
             </div>
             
