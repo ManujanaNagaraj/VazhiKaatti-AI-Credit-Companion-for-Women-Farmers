@@ -263,8 +263,9 @@ const OfficerDashboard = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="border-t"
-                      style={{ borderColor: '#2D5A7B' }}
+                      className="border-t transition-colors hover:bg-opacity-50"
+                      style={{ borderColor: '#2D5A7B', backgroundColor: 'transparent' }}
+                      whileHover={{ backgroundColor: '#1a2f47' }}
                     >
                       <td 
                         className="px-4 md:px-6 py-4 text-sm font-medium" 
