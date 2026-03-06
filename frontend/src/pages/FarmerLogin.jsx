@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserCircle, Phone, MapPin } from 'lucide-react';
 import TamilText from '../components/TamilText';
+import AnimatedPage from '../components/AnimatedPage';
 
 const FarmerLogin = () => {
   const navigate = useNavigate();
@@ -20,7 +21,8 @@ const FarmerLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
+    <AnimatedPage>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -136,6 +138,7 @@ const FarmerLogin = () => {
         </button>
       </div>
     </div>
+    </AnimatedPage>
   );
 };
 
