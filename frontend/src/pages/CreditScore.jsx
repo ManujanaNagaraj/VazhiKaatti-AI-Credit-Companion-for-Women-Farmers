@@ -192,6 +192,24 @@ const CreditScore = () => {
               <GradeBadge score={displayScore} />
             </div>
           </div>
+          
+          {/* Tamil Explanation */}
+          {(scoreData.explanation || scoreData.tamil_explanation) && (
+            <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
+              <h2 
+                className="text-2xl font-bold mb-4 text-center" 
+                style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+              >
+                விளக்கம்
+              </h2>
+              <p 
+                className="text-lg leading-relaxed text-center" 
+                style={{ color: '#2D6A4F', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+              >
+                {scoreData.tamil_explanation || scoreData.explanation}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </AnimatedPage>
