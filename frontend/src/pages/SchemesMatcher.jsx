@@ -10,8 +10,17 @@ const SchemeCard = ({ scheme }) => {
       className="bg-white rounded-3xl p-8 shadow-lg"
       style={{ border: '3px solid #D4A017' }}
     >
+      {/* Scheme Name */}
       <div className="mb-6">
-        <p className="text-sm text-gray-500">Scheme Card</p>
+        <h3 
+          className="text-2xl font-bold mb-2" 
+          style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+        >
+          {scheme.tamil_name || scheme.name_tamil || 'பெண் விவசாயிகள் திட்டம்'}
+        </h3>
+        <p className="text-lg font-semibold" style={{ color: '#2D6A4F' }}>
+          {scheme.name || scheme.english_name || 'Women Farmers Scheme'}
+        </p>
       </div>
     </div>
   );
