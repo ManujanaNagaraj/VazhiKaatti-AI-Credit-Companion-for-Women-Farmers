@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { MessageCircle, CheckCircle, AlertCircle } from 'lucide-react';
 import VoiceInput from '../components/VoiceInput';
 import TamilText from '../components/TamilText';
+import AnimatedPage from '../components/AnimatedPage';
 
 const Questions = () => {
   const navigate = useNavigate();
@@ -110,7 +111,8 @@ const Questions = () => {
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 px-4">
+    <AnimatedPage>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -214,6 +216,7 @@ const Questions = () => {
         </div>
       </div>
     </div>
+    </AnimatedPage>
   );
 };
 
