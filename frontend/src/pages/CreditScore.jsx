@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { TrendingUp, Users, Wallet } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import AnimatedPage from '../components/AnimatedPage';
 
 // Circular SVG Gauge Component  
@@ -140,6 +141,27 @@ const CreditScore = () => {
       return () => clearInterval(timer);
     }
   }, [scoreData]);
+
+  useEffect(() => {
+    // Confetti burst for high scores (> 70)
+    if (scoreData && displayScore > 0) {
+      const targetScore = scoreData.score || scoreData.credit_score || 74;
+      
+      if (targetScore > 70) {
+        // Trigger confetti after count-up animation completes
+        const confettiTimer = setTimeout(() => {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#D4A017', '#2D6A4F', '#27AE60', '#16A085']
+          });
+        }, 2200); // Slightly after animation ends
+        
+        return () => clearTimeout(confettiTimer);
+      }
+    }
+  }, [scoreData, displayScore]);
 
   const loadScoreData = () => {
     // Try to get score data from location.state first
