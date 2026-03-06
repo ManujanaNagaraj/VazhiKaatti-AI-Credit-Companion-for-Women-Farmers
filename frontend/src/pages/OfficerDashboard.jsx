@@ -22,6 +22,13 @@ const OfficerDashboard = () => {
     { id: 10, name: 'கல்பனா ரவி', village: 'Dharmapuri', score: 55, grade: 'Fair', scheme_applied: 'Soil Health Card', status: 'Pending', applied_date: '2026-03-06' }
   ]);
 
+  // Filter applications based on search and grade
+  const filteredApplications = applications.filter(app => {
+    const matchesSearch = app.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGrade = gradeFilter === 'All' || app.grade === gradeFilter;
+    return matchesSearch && matchesGrade;
+  });
+
   return (
     <AnimatedPage>
       <div className="min-h-screen" style={{ backgroundColor: '#0F1B2D' }}>
@@ -140,6 +147,73 @@ const OfficerDashboard = () => {
                 <option value="Fair">Fair</option>
                 <option value="Poor">Poor</option>
               </select>
+            </div>
+          </div>
+
+          {/* Applications Table */}
+          <div className="rounded-xl shadow-lg overflow-hidden" style={{ backgroundColor: '#1e3a5f' }}>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr style={{ backgroundColor: '#152943' }}>
+                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                      Name
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                      Village
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                      Score
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                      Grade
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                      Scheme
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                      Status
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredApplications.map((app) => (
+                    <tr 
+                      key={app.id}
+                      className="border-t"
+                      style={{ borderColor: '#2D5A7B' }}
+                    >
+                      <td 
+                        className="px-6 py-4 text-sm font-medium" 
+                        style={{ color: '#E8F4EA', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+                      >
+                        {app.name}
+                      </td>
+                      <td className="px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
+                        {app.village}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-bold" style={{ color: '#E8F4EA' }}>
+                        {app.score}
+                      </td>
+                      <td className="px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
+                        {app.grade}
+                      </td>
+                      <td className="px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
+                        {app.scheme_applied}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold" style={{ color: '#E8F4EA' }}>
+                        {app.status}
+                      </td>
+                      <td className="px-6 py-4 text-sm">
+                        <span style={{ color: '#B8C5D0' }}>Actions</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
