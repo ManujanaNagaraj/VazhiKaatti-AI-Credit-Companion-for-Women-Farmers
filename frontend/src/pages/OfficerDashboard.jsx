@@ -215,8 +215,27 @@ const OfficerDashboard = () => {
                       <td className="px-6 py-4 text-sm font-semibold" style={{ color: '#E8F4EA' }}>
                         {app.status}
                       </td>
-                      <td className="px-6 py-4 text-sm">
-                        <span style={{ color: '#B8C5D0' }}>Actions</span>
+                      <td className="px-6 py-4">
+                        {app.status === 'Pending' ? (
+                          <div className="flex gap-2">
+                            <button
+                              className="px-4 py-2 rounded-lg font-semibold text-sm transition-all hover:scale-105"
+                              style={{ backgroundColor: '#27AE60', color: '#FFFFFF' }}
+                            >
+                              Approve
+                            </button>
+                            <button
+                              className="px-4 py-2 rounded-lg font-semibold text-sm transition-all hover:scale-105"
+                              style={{ backgroundColor: '#C0392B', color: '#FFFFFF' }}
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-sm" style={{ color: '#B8C5D0' }}>
+                            {app.status}
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ))}
