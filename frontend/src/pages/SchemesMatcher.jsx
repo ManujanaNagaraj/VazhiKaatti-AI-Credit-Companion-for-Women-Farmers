@@ -3,6 +3,20 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AnimatedPage from '../components/AnimatedPage';
 
+// SchemeCard Component
+const SchemeCard = ({ scheme }) => {
+  return (
+    <div 
+      className="bg-white rounded-3xl p-8 shadow-lg"
+      style={{ border: '3px solid #D4A017' }}
+    >
+      <div className="mb-6">
+        <p className="text-sm text-gray-500">Scheme Card</p>
+      </div>
+    </div>
+  );
+};
+
 const SchemesMatcher = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -109,6 +123,13 @@ const SchemesMatcher = () => {
           <h1 className="text-4xl font-bold text-center mb-8" style={{ color: '#1B4332' }}>
             Matched Schemes
           </h1>
+
+          {/* Scheme Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {schemes.map((scheme, index) => (
+              <SchemeCard key={index} scheme={scheme} />
+            ))}
+          </div>
         </div>
       </div>
     </AnimatedPage>
