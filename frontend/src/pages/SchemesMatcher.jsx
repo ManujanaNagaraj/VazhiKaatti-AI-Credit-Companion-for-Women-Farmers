@@ -79,6 +79,18 @@ const SchemeCard = ({ scheme }) => {
           ))}
         </div>
       </div>
+
+      {/* Apply Now Button */}
+      <button
+        className="w-full py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+        style={{ 
+          backgroundColor: '#27AE60', 
+          color: '#FFFFFF',
+          fontFamily: 'Noto Sans Tamil, sans-serif'
+        }}
+      >
+        இப்போதே விண்ணப்பிக்கவும்
+      </button>
     </div>
   );
 };
