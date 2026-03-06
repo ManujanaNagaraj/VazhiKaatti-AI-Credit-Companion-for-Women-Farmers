@@ -95,9 +95,14 @@ const FarmerLogin = () => {
         otp: otpValue
       });
 
-      // Save farmer data to localStorage
-      localStorage.setItem('farmerData', JSON.stringify(response.data));
-      localStorage.setItem('aadhaarVerified', 'true');
+      // Save farmer data to localStorage with individual keys
+      const farmerData = response.data.farmer;
+      localStorage.setItem('farmer_name', farmerData.name);
+      localStorage.setItem('farmer_age', farmerData.age.toString());
+      localStorage.setItem('farmer_village', farmerData.village);
+      localStorage.setItem('farmer_district', farmerData.district);
+      localStorage.setItem('farmer_aadhaar', aadhaarNumber);
+      localStorage.setItem('farmer_verified', 'true');
       
       // Navigate to profile
       navigate('/profile');

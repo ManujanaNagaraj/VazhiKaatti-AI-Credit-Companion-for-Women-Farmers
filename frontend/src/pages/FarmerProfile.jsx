@@ -14,10 +14,19 @@ const FarmerProfile = () => {
   const [fetchingLand, setFetchingLand] = useState(false);
 
   useEffect(() => {
-    // Load farmer data from localStorage
-    const storedData = localStorage.getItem('farmerData');
-    if (storedData) {
-      setFarmerData(JSON.parse(storedData));
+    // Load farmer data from individual localStorage keys
+    const name = localStorage.getItem('farmer_name');
+    const age = localStorage.getItem('farmer_age');
+    const village = localStorage.getItem('farmer_village');
+    const district = localStorage.getItem('farmer_district');
+    
+    if (name && age && village && district) {
+      setFarmerData({
+        name: name || 'Not Available',
+        age: age || 'N/A',
+        village: village || 'N/A',
+        district: district || 'N/A'
+      });
       
       // Fetch land records from API
       fetchLandRecords();
@@ -131,19 +140,19 @@ const FarmerProfile = () => {
               
               {/* Name */}
               <h2 className="text-2xl font-bold mb-2" style={{ color: '#1B4332' }}>
-                {farmerData.name || 'Farmer Name'}
+                {farmerData?.name || 'Farmer Name'}
               </h2>
               
               {/* Age, Village, District */}
               <div className="text-center">
                 <p className="text-lg mb-1" style={{ color: '#6B4226' }}>
-                  Age: {farmerData.age || 'N/A'} years
+                  Age: {farmerData?.age || 'N/A'} years
                 </p>
                 <p className="text-lg mb-1" style={{ color: '#6B4226' }}>
-                  Village: {farmerData.village || 'N/A'}
+                  Village: {farmerData?.village || 'N/A'}
                 </p>
                 <p className="text-lg" style={{ color: '#6B4226' }}>
-                  District: {farmerData.district || 'N/A'}
+                  District: {farmerData?.district || 'N/A'}
                 </p>
               </div>
             </div>
@@ -168,28 +177,28 @@ const FarmerProfile = () => {
               <div className="border-l-4 pl-4" style={{ borderColor: '#2D6A4F' }}>
                 <p className="text-sm" style={{ color: '#6B4226' }}>Name / பெயர்</p>
                 <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
-                  {farmerData.name || 'Not Available'}
+                  {farmerData?.name || 'Not Available'}
                 </p>
               </div>
               
               <div className="border-l-4 pl-4" style={{ borderColor: '#2D6A4F' }}>
                 <p className="text-sm" style={{ color: '#6B4226' }}>Age / வயது</p>
                 <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
-                  {farmerData.age || 'Not Available'} years
+                  {farmerData?.age || 'Not Available'} years
                 </p>
               </div>
               
               <div className="border-l-4 pl-4" style={{ borderColor: '#2D6A4F' }}>
                 <p className="text-sm" style={{ color: '#6B4226' }}>Village / கிராமம்</p>
                 <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
-                  {farmerData.village || 'Not Available'}
+                  {farmerData?.village || 'Not Available'}
                 </p>
               </div>
               
               <div className="border-l-4 pl-4" style={{ borderColor: '#2D6A4F' }}>
                 <p className="text-sm" style={{ color: '#6B4226' }}>District / மாவட்டம்</p>
                 <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
-                  {farmerData.district || 'Not Available'}
+                  {farmerData?.district || 'Not Available'}
                 </p>
               </div>
             </div>
