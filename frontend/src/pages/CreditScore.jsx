@@ -2,6 +2,60 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import AnimatedPage from '../components/AnimatedPage';
 
+// Circular SVG Gauge Component  
+const CircularGauge = ({ score, size = 300 }) => {
+  const radius = size / 2 - 20;
+  const circumference = 2 * Math.PI * radius;
+  const strokeWidth = 20;
+  
+  // Calculate progress (score is 0-100)
+  const progress = (score / 100) * circumference;
+  const dashOffset = circumference - progress;
+  
+  return (
+    <svg width={size} height={size} className="mx-auto">
+      {/* Background circle */}
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        fill="none"
+        stroke="#E5E7EB"
+        strokeWidth={strokeWidth}
+      />
+      
+      {/* Progress circle */}
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        fill="none"
+        stroke="#2D6A4F"
+        strokeWidth={strokeWidth}
+        strokeDasharray={circumference}
+        strokeDashoffset={dashOffset}
+        strokeLinecap="round"
+        transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        style={{ transition: 'stroke-dashoffset 2s ease-out' }}
+      />
+      
+      {/* Center text */}
+      <text
+        x="50%"
+        y="50%"
+        textAnchor="middle"
+        dy=".3em"
+        fontSize="48"
+        fontWeight="bold"
+        fill="#1B4332"
+      >
+        {score}
+      </text>
+    </svg>
+  );
+};
+
+
 const CreditScore = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,9 +124,15 @@ const CreditScore = () => {
             Credit Score Result
           </h1>
           
-          {/* Placeholder for gauge and content */}
-          <div className="text-center" style={{ color: '#6B4226' }}>
-            Score: {scoreData.score || scoreData.credit_score || 'N/A'}
+          {/* Gauge */}
+          <div className="bg-white rounded-3xl shadow-2xl p-12 mb-8">
+            <CircularGauge score={scoreData.score || scoreData.credit_score || 74} />
+            <p 
+              className="text-center mt-4 text-xl font-semibold" 
+              style={{ color: '#6B4226', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+            >
+              உங்கள் மதிப்பெண்
+            </p>
           </div>
         </div>
       </div>
