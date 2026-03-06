@@ -326,7 +326,12 @@ const CreditScore = () => {
           </div>
           
           {/* Navigation Buttons */}
-          <div className="flex flex-col md:flex-row gap-4 justify-center mt-8">
+          <motion.div 
+            className="flex flex-col md:flex-row gap-4 justify-center mt-8"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.5 }}
+          >
             <button
               onClick={() => navigate('/schemes', { state: { scoreData } })}
               className="px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
@@ -349,7 +354,7 @@ const CreditScore = () => {
             >
               மீண்டும் முயற்சி
             </button>
-          </div>
+          </motion.div>
         </div>
       </div>
     </AnimatedPage>
