@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { TrendingUp, Award, AlertTriangle, CheckCircle, ArrowRight } from 'lucide-react';
 import ScoreGauge from '../components/ScoreGauge';
 import TamilText from '../components/TamilText';
+import AnimatedPage from '../components/AnimatedPage';
 import axios from 'axios';
 
 const CreditScore = () => {
@@ -150,7 +151,8 @@ const CreditScore = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 px-4">
+    <AnimatedPage>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
