@@ -284,6 +284,32 @@ const CreditScore = () => {
               />
             </div>
           </div>
+          
+          {/* Navigation Buttons */}
+          <div className="flex flex-col md:flex-row gap-4 justify-center mt-8">
+            <button
+              onClick={() => navigate('/schemes', { state: { scoreData } })}
+              className="px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              style={{ 
+                backgroundColor: '#2D6A4F', 
+                color: '#FAF7F0',
+                fontFamily: 'Noto Sans Tamil, sans-serif'
+              }}
+            >
+              திட்டங்களை பார்க்கவும் →
+            </button>
+            <button
+              onClick={() => navigate('/questions')}
+              className="px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              style={{ 
+                backgroundColor: '#D4A017', 
+                color: '#1B4332',
+                fontFamily: 'Noto Sans Tamil, sans-serif'
+              }}
+            >
+              மீண்டும் முயற்சி
+            </button>
+          </div>
         </div>
       </div>
     </AnimatedPage>
