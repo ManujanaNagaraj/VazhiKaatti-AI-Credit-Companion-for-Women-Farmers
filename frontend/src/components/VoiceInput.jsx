@@ -1,137 +1,154 @@
-import React, { useState } from 'react';
-import { Mic, MicOff, Volume2 } from 'lucide-react';
-import TamilText from './TamilText';
+import React, { useState, useEffect } from 'react';
+import { Mic, MicOff } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const VoiceInput = ({ onTranscript, questionId }) => {
-  const [isRecording, setIsRecording] = useState(false);
+const VoiceInput = ({ onTranscript, placeholder = "உங்கள் பதிலை சொல்லுங்கள்..." }) => {
+  const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const [error, setError] = useState('');
+  const [recognition, setRecognition] = useState(null);
 
-  const startRecording = async () => {
-    try {
-      // Check if browser supports speech recognition
+  useEffect(() => {
+    // Initialize Web Speech API
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognitionInstance = new SpeechRecognition();
       
-      if (!SpeechRecognition) {
-        setError('Speech recognition is not supported in your browser');
-        return;
-      }
-
-      const recognition = new SpeechRecognition();
-      recognition.lang = 'ta-IN'; // Tamil language
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-
-      recognition.onstart = () => {
-        setIsRecording(true);
-        setError('');
+      recognitionInstance.continuous = false;
+      recognitionInstance.interimResults = false;
+      recognitionInstance.lang = 'ta-IN'; // Tamil language
+      
+      recognitionInstance.onresult = (event) => {
+        const result = event.results[0][0].transcript;
+        setTranscript(result);
+        onTranscript(result);
+        setIsListening(false);
       };
-
-      recognition.onresult = (event) => {
-        const text = event.results[0][0].transcript;
-        setTranscript(text);
-        onTranscript(text);
-        setIsRecording(false);
-      };
-
-      recognition.onerror = (event) => {
+      
+      recognitionInstance.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
-        setError('Error recognizing speech. Please try again.');
-        setIsRecording(false);
+        setIsListening(false);
       };
-
-      recognition.onend = () => {
-        setIsRecording(false);
+      
+      recognitionInstance.onend = () => {
+        setIsListening(false);
       };
+      
+      setRecognition(recognitionInstance);
+    }
+  }, [onTranscript]);
 
+  const toggleListening = () => {
+    if (!recognition) {
+      alert('Voice recognition not supported in this browser. Please use Chrome or Edge.');
+      return;
+    }
+
+    if (isListening) {
+      recognition.stop();
+      setIsListening(false);
+    } else {
       recognition.start();
-    } catch (err) {
-      console.error('Error starting speech recognition:', err);
-      setError('Could not start speech recognition');
-      setIsRecording(false);
+      setIsListening(true);
     }
   };
 
-  const stopRecording = () => {
-    setIsRecording(false);
-  };
-
-  const speakQuestion = () => {
-    // Text-to-speech functionality
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(transcript || 'Ready to record');
-      utterance.lang = 'ta-IN';
-      window.speechSynthesis.speak(utterance);
-    }
+  const handleManualInput = (e) => {
+    const value = e.target.value;
+    setTranscript(value);
+    onTranscript(value);
   };
 
   return (
-    <div className="bg-gray-50 rounded-lg p-4">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center space-x-2">
-          <Mic className="h-5 w-5 text-gray-600" />
-          <span className="text-sm font-medium text-gray-700">Voice Input</span>
-          <TamilText text="குரல் உள்ளீடு" className="text-xs text-gray-600" />
-        </div>
-        <button
-          onClick={speakQuestion}
-          className="p-2 hover:bg-gray-200 rounded-full transition-colors"
-          title="Listen to question"
+    <div className="w-full">
+      {/* Mic Button */}
+      <div className="flex justify-center mb-4">
+        <motion.button
+          onClick={toggleListening}
+          className="relative rounded-full flex items-center justify-center"
+          style={{
+            width: '80px',
+            height: '80px',
+            backgroundColor: isListening ? '#2D6A4F' : '#D4A017',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+          }}
+          whileTap={{ scale: 0.95 }}
+          animate={isListening ? {
+            scale: [1, 1.1, 1],
+            transition: { duration: 1, repeat: Infinity }
+          } : {}}
         >
-          <Volume2 className="h-5 w-5 text-gray-600" />
-        </button>
-      </div>
-
-      <div className="flex items-center space-x-3">
-        <button
-          onClick={isRecording ? stopRecording : startRecording}
-          className={`flex-shrink-0 p-4 rounded-full transition-all ${
-            isRecording 
-              ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
-              : 'bg-green-600 hover:bg-green-700'
-          } text-white shadow-lg`}
-        >
-          {isRecording ? (
-            <MicOff className="h-6 w-6" />
+          {/* Pulsing Ring when Recording */}
+          {isListening && (
+            <motion.div
+              className="absolute rounded-full"
+              style={{
+                width: '100px',
+                height: '100px',
+                border: '3px solid #2D6A4F',
+                top: '-10px',
+                left: '-10px'
+              }}
+              animate={{
+                scale: [1, 1.3, 1],
+                opacity: [0.7, 0, 0.7]
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity
+              }}
+            />
+          )}
+          
+          {isListening ? (
+            <Mic className="h-10 w-10" style={{ color: '#FAF7F0' }} />
           ) : (
-            <Mic className="h-6 w-6" />
+            <MicOff className="h-10 w-10" style={{ color: '#FAF7F0' }} />
           )}
-        </button>
-
-        <div className="flex-1">
-          {isRecording && (
-            <div className="flex items-center space-x-2">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-              </div>
-              <span className="text-sm text-gray-600">Listening...</span>
-            </div>
-          )}
-          
-          {transcript && !isRecording && (
-            <div className="text-sm text-gray-700 bg-white p-2 rounded border border-gray-300">
-              {transcript}
-            </div>
-          )}
-          
-          {!isRecording && !transcript && (
-            <div className="text-sm text-gray-500">
-              Click the microphone to record your answer in Tamil or English
-            </div>
-          )}
-        </div>
+        </motion.button>
       </div>
 
-      {error && (
-        <div className="mt-3 text-sm text-red-600 bg-red-50 p-2 rounded">
-          {error}
+      {/* Listening Status */}
+      {isListening && (
+        <p 
+          className="text-center mb-4 font-semibold animate-pulse"
+          style={{ color: '#2D6A4F', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+        >
+          கேட்கிறேன்...
+        </p>
+      )}
+
+      {/* Recognized Text */}
+      {transcript && (
+        <div className="mb-4 p-4 rounded-lg" style={{ backgroundColor: '#D4F1DD' }}>
+          <p className="text-sm mb-1" style={{ color: '#6B4226' }}>
+            Recognized / அங்கீகரிக்கப்பட்டது:
+          </p>
+          <p 
+            className="text-lg font-semibold" 
+            style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+          >
+            {transcript}
+          </p>
         </div>
       )}
 
-      <div className="mt-3 text-xs text-gray-500">
-        <TamilText text="தமிழ் அல்லது ஆங்கிலத்தில் பேசலாம்" />
+      {/* Fallback Manual Input */}
+      <div>
+        <label className="block text-sm mb-2" style={{ color: '#6B4226' }}>
+          Or type manually / அல்லது தட்டச்சு செய்யுங்கள்:
+        </label>
+        <input
+          type="text"
+          value={transcript}
+          onChange={handleManualInput}
+          placeholder={placeholder}
+          className="w-full px-4 py-3 rounded-lg border-2"
+          style={{
+            borderColor: '#2D6A4F',
+            backgroundColor: 'white',
+            fontFamily: 'Noto Sans Tamil, sans-serif'
+          }}
+        />
       </div>
     </div>
   );
