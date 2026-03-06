@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
 
 const OfficerDashboard = () => {
@@ -21,10 +22,30 @@ const OfficerDashboard = () => {
   return (
     <AnimatedPage>
       <div className="min-h-screen" style={{ backgroundColor: '#0F1B2D' }}>
+        {/* Header */}
+        <header className="border-b" style={{ borderColor: '#1e3a5f' }}>
+          <div className="max-w-7xl mx-auto px-4 py-6">
+            <div className="flex justify-between items-center">
+              <h1 
+                className="text-3xl font-bold" 
+                style={{ color: '#D4A017', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+              >
+                VazhiKaatti — அதிகாரி போர்டல்
+              </h1>
+              <button
+                onClick={() => navigate('/login')}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all hover:scale-105"
+                style={{ backgroundColor: '#1e3a5f', color: '#D4A017' }}
+              >
+                <LogOut size={20} />
+                <span className="font-semibold">Logout</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold text-center mb-8" style={{ color: '#D4A017' }}>
-            VazhiKaatti — அதிகாரி போர்டல்
-          </h1>
+          {/* Content will go here */}
         </div>
       </div>
     </AnimatedPage>
