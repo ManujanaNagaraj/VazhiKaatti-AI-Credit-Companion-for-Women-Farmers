@@ -229,6 +229,7 @@ const CreditScore = () => {
         </div>
       </div>
     </div>
+    </AnimatedPage>
   );
 };
 
