@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import AnimatedPage from '../components/AnimatedPage';
 
 const SchemesMatcher = () => {
@@ -12,6 +13,12 @@ const SchemesMatcher = () => {
   useEffect(() => {
     loadScore();
   }, []);
+
+  useEffect(() => {
+    if (score > 0) {
+      fetchSchemes();
+    }
+  }, [score]);
 
   const loadScore = () => {
     // Try to get score from location.state first
@@ -31,6 +38,18 @@ const SchemesMatcher = () => {
         // No score available, redirect to questions
         navigate('/questions');
       }
+    }
+  };
+
+  const fetchSchemes = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://localhost:8000/match-schemes?score=${score}`);
+      setSchemes(response.data.schemes || []);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching schemes:', error);
+      setLoading(false);
     }
   };
 
