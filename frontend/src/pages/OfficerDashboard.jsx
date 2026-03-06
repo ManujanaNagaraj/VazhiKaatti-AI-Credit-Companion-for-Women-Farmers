@@ -7,6 +7,7 @@ const OfficerDashboard = () => {
   const navigate = useNavigate();
   
   const [searchTerm, setSearchTerm] = useState('');
+  const [gradeFilter, setGradeFilter] = useState('All');
   
   const [applications, setApplications] = useState([
     { id: 1, name: 'கமலா தேவி', village: 'Thanjavur', score: 85, grade: 'Excellent', scheme_applied: 'PM-KISAN', status: 'Pending', applied_date: '2026-02-15' },
@@ -119,6 +120,26 @@ const OfficerDashboard = () => {
                   border: '2px solid #2D5A7B'
                 }}
               />
+            </div>
+
+            {/* Grade Filter Dropdown */}
+            <div className="md:w-64">
+              <select
+                value={gradeFilter}
+                onChange={(e) => setGradeFilter(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg font-medium"
+                style={{ 
+                  backgroundColor: '#1e3a5f', 
+                  color: '#E8F4EA',
+                  border: '2px solid #2D5A7B'
+                }}
+              >
+                <option value="All">All Grades</option>
+                <option value="Excellent">Excellent</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Poor">Poor</option>
+              </select>
             </div>
           </div>
         </div>
