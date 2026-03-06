@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Check, Share2, Phone } from 'lucide-react';
 import axios from 'axios';
 import AnimatedPage from '../components/AnimatedPage';
 
@@ -207,6 +207,25 @@ const SchemesMatcher = () => {
             {schemes.map((scheme, index) => (
               <SchemeCard key={index} scheme={scheme} />
             ))}
+          </div>
+
+          {/* WhatsApp Share Button */}
+          <div className="flex justify-center mb-8">
+            <button
+              onClick={() => {
+                const message = `நான் VazhiKaatti மூலம் ${score}/100 மதிப்பெண் பெற்றேன்! இந்த திட்டங்களுக்கு தகுதியானவர்கள் இப்போதே விண்ணப்பிக்கலாம்! 🌾`;
+                window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+              }}
+              className="flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              style={{ 
+                backgroundColor: '#25D366', 
+                color: '#FFFFFF',
+                fontFamily: 'Noto Sans Tamil, sans-serif'
+              }}
+            >
+              <Share2 size={24} />
+              <span>WhatsApp இல் பகிர்</span>
+            </button>
           </div>
         </div>
       </div>
