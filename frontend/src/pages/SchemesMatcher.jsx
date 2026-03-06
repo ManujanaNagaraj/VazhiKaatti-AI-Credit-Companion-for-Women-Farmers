@@ -9,8 +9,11 @@ import AnimatedPage from '../components/AnimatedPage';
 const SchemeCard = ({ scheme }) => {
   return (
     <div 
-      className="bg-white rounded-3xl p-8 shadow-lg"
-      style={{ border: '3px solid #D4A017' }}
+      className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+      style={{ 
+        border: '3px solid #D4A017',
+        boxShadow: '0 10px 30px rgba(212, 160, 23, 0.1)'
+      }}
     >
       {/* Scheme Name */}
       <div className="mb-6">
