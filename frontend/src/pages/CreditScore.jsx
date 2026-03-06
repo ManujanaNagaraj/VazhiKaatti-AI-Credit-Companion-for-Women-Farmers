@@ -279,12 +279,15 @@ const CreditScore = () => {
           
           {/* Contributing Factors */}
           <div className="mb-8">
-            <h2 
+            <motion.h2 
               className="text-2xl font-bold mb-6 text-center" 
               style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
             >
               உங்கள் மதிப்பெண்ணை அதிகரித்தவை
-            </h2>
+            </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
