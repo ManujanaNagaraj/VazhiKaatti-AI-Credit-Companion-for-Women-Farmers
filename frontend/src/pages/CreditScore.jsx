@@ -275,24 +275,42 @@ const CreditScore = () => {
               உங்கள் மதிப்பெண்ணை அதிகரித்தவை
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <FactorCard 
-                icon={TrendingUp} 
-                tamil="நிலையான வருமானம்" 
-                english="Stable Income"
-                color="#27AE60"
-              />
-              <FactorCard 
-                icon={Users} 
-                tamil="குழு உறுப்பினர்" 
-                english="Group Membership"
-                color="#2D6A4F"
-              />
-              <FactorCard 
-                icon={Wallet} 
-                tamil="நிதி வரலாறு" 
-                english="Financial History"
-                color="#D4A017"
-              />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <FactorCard 
+                  icon={TrendingUp} 
+                  tamil="நிலையான வருமானம்" 
+                  english="Stable Income"
+                  color="#27AE60"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <FactorCard 
+                  icon={Users} 
+                  tamil="குழு உறுப்பினர்" 
+                  english="Group Membership"
+                  color="#2D6A4F"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <FactorCard 
+                  icon={Wallet} 
+                  tamil="நிதி வரலாறு" 
+                  english="Financial History"
+                  color="#D4A017"
+                />
+              </motion.div>
             </div>
           </div>
           
