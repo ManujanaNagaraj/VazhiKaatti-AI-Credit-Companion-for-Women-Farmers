@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
 import FarmerLogin from './pages/FarmerLogin';
 import FarmerProfile from './pages/FarmerProfile';
@@ -12,6 +13,7 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <Navbar />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<FarmerLogin />} />
