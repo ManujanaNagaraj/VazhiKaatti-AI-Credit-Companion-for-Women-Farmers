@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User } from 'lucide-react';
+import { User, CheckCircle } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
 
 const FarmerProfile = () => {
@@ -86,7 +86,50 @@ const FarmerProfile = () => {
             </div>
           </div>
 
-          {/* Placeholder for info cards */}
+          {/* Card 1 - Identity Information */}
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold" style={{ color: '#1B4332' }}>
+                Identity Information
+              </h3>
+              <div className="flex items-center space-x-1" style={{ color: '#2D6A4F' }}>
+                <CheckCircle className="h-5 w-5" />
+                <span className="text-sm font-semibold">✓ Verified</span>
+              </div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="border-l-4 pl-4" style={{ borderColor: '#2D6A4F' }}>
+                <p className="text-sm" style={{ color: '#6B4226' }}>Name / பெயர்</p>
+                <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
+                  {farmerData.name || 'Not Available'}
+                </p>
+              </div>
+              
+              <div className="border-l-4 pl-4" style={{ borderColor: '#2D6A4F' }}>
+                <p className="text-sm" style={{ color: '#6B4226' }}>Age / வயது</p>
+                <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
+                  {farmerData.age || 'Not Available'} years
+                </p>
+              </div>
+              
+              <div className="border-l-4 pl-4" style={{ borderColor: '#2D6A4F' }}>
+                <p className="text-sm" style={{ color: '#6B4226' }}>Village / கிராமம்</p>
+                <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
+                  {farmerData.village || 'Not Available'}
+                </p>
+              </div>
+              
+              <div className="border-l-4 pl-4" style={{ borderColor: '#2D6A4F' }}>
+                <p className="text-sm" style={{ color: '#6B4226' }}>District / மாவட்டம்</p>
+                <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
+                  {farmerData.district || 'Not Available'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Placeholder for more cards */}
           <div className="text-center" style={{ color: '#6B4226' }}>
             More information cards coming soon...
           </div>
