@@ -195,8 +195,16 @@ const OfficerDashboard = () => {
                       <td className="px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
                         {app.village}
                       </td>
-                      <td className="px-6 py-4 text-sm font-bold" style={{ color: '#E8F4EA' }}>
-                        {app.score}
+                      <td className="px-6 py-4">
+                        <span 
+                          className="inline-block px-3 py-1 rounded-full text-sm font-bold"
+                          style={{
+                            backgroundColor: app.score <= 40 ? '#C0392B' : app.score <= 70 ? '#E67E22' : '#27AE60',
+                            color: '#FFFFFF'
+                          }}
+                        >
+                          {app.score}
+                        </span>
                       </td>
                       <td className="px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
                         {app.grade}
