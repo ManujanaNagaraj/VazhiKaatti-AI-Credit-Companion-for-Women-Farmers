@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Check, Share2, Phone } from 'lucide-react';
+import { motion } from 'framer-motion';
 import axios from 'axios';
 import AnimatedPage from '../components/AnimatedPage';
 
@@ -205,7 +206,19 @@ const SchemesMatcher = () => {
           {/* Scheme Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {schemes.map((scheme, index) => (
-              <SchemeCard key={index} scheme={scheme} />
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  delay: index * 0.15, 
+                  duration: 0.5,
+                  type: "spring",
+                  stiffness: 100
+                }}
+              >
+                <SchemeCard scheme={scheme} />
+              </motion.div>
             ))}
           </div>
 
