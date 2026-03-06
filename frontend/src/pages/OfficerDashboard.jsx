@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, FileText, CheckCircle, Clock, XCircle, Search } from 'lucide-react';
+import { LogOut, FileText, CheckCircle, Clock, XCircle, Search, Check, X } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
 
 const OfficerDashboard = () => {
@@ -28,6 +28,22 @@ const OfficerDashboard = () => {
     const matchesGrade = gradeFilter === 'All' || app.grade === gradeFilter;
     return matchesSearch && matchesGrade;
   });
+
+  const handleApprove = (id) => {
+    if (window.confirm('Approve this application? / இந்த விண்ணப்பத்தை ஒப்புதல் அளிக்கவா?')) {
+      setApplications(applications.map(app => 
+        app.id === id ? { ...app, status: 'Approved' } : app
+      ));
+    }
+  };
+
+  const handleReject = (id) => {
+    if (window.confirm('Reject this application? / இந்த விண்ணப்பத்தை நிராகரிக்கவா?')) {
+      setApplications(applications.map(app => 
+        app.id === id ? { ...app, status: 'Rejected' } : app
+      ));
+    }
+  };
 
   return (
     <AnimatedPage>
@@ -219,15 +235,19 @@ const OfficerDashboard = () => {
                         {app.status === 'Pending' ? (
                           <div className="flex gap-2">
                             <button
-                              className="px-4 py-2 rounded-lg font-semibold text-sm transition-all hover:scale-105"
+                              onClick={() => handleApprove(app.id)}
+                              className="px-4 py-2 rounded-lg font-semibold text-sm transition-all hover:scale-105 flex items-center gap-2"
                               style={{ backgroundColor: '#27AE60', color: '#FFFFFF' }}
                             >
+                              <Check size={16} />
                               Approve
                             </button>
                             <button
-                              className="px-4 py-2 rounded-lg font-semibold text-sm transition-all hover:scale-105"
+                              onClick={() => handleReject(app.id)}
+                              className="px-4 py-2 rounded-lg font-semibold text-sm transition-all hover:scale-105 flex items-center gap-2"
                               style={{ backgroundColor: '#C0392B', color: '#FFFFFF' }}
                             >
+                              <X size={16} />
                               Reject
                             </button>
                           </div>
