@@ -2,12 +2,14 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Leaf, TrendingUp, Users, Award } from 'lucide-react';
 import TamilText from '../components/TamilText';
+import AnimatedPage from '../components/AnimatedPage';
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+    <AnimatedPage>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -109,6 +111,7 @@ const LandingPage = () => {
         </div>
       </footer>
     </div>
+    </AnimatedPage>
   );
 };
 
