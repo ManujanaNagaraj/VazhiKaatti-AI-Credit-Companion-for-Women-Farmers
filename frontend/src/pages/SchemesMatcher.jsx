@@ -22,6 +22,19 @@ const SchemeCard = ({ scheme }) => {
           {scheme.name || scheme.english_name || 'Women Farmers Scheme'}
         </p>
       </div>
+
+      {/* Benefit Amount */}
+      <div className="mb-6 text-center py-4 rounded-xl" style={{ backgroundColor: '#FFF9E6' }}>
+        <p 
+          className="text-4xl font-bold" 
+          style={{ color: '#D4A017', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+        >
+          {scheme.benefit_amount || scheme.amount || '₹1,00,000 வரை'}
+        </p>
+        <p className="text-sm mt-2" style={{ color: '#6B4226' }}>
+          Maximum Benefit
+        </p>
+      </div>
     </div>
   );
 };
