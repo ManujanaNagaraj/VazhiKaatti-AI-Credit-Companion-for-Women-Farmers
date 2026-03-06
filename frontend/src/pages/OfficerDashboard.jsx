@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut } from 'lucide-react';
+import { LogOut, FileText, CheckCircle, Clock, XCircle } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
 
 const OfficerDashboard = () => {
@@ -48,6 +48,9 @@ const OfficerDashboard = () => {
           {/* Stat Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+              <div className="flex items-center justify-between mb-3">
+                <FileText size={36} style={{ color: '#D4A017' }} />
+              </div>
               <div className="text-3xl font-bold mb-2" style={{ color: '#D4A017' }}>
                 {applications.length}
               </div>
@@ -57,6 +60,9 @@ const OfficerDashboard = () => {
             </div>
             
             <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+              <div className="flex items-center justify-between mb-3">
+                <CheckCircle size={36} style={{ color: '#27AE60' }} />
+              </div>
               <div className="text-3xl font-bold mb-2" style={{ color: '#27AE60' }}>
                 {applications.filter(app => app.status === 'Approved').length}
               </div>
@@ -66,6 +72,9 @@ const OfficerDashboard = () => {
             </div>
             
             <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+              <div className="flex items-center justify-between mb-3">
+                <Clock size={36} style={{ color: '#E67E22' }} />
+              </div>
               <div className="text-3xl font-bold mb-2" style={{ color: '#E67E22' }}>
                 {applications.filter(app => app.status === 'Pending').length}
               </div>
@@ -75,6 +84,9 @@ const OfficerDashboard = () => {
             </div>
             
             <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+              <div className="flex items-center justify-between mb-3">
+                <XCircle size={36} style={{ color: '#C0392B' }} />
+              </div>
               <div className="text-3xl font-bold mb-2" style={{ color: '#C0392B' }}>
                 {applications.filter(app => app.status === 'Rejected').length}
               </div>
