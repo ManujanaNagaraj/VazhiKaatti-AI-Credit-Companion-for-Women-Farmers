@@ -12,6 +12,13 @@ const CircularGauge = ({ score, size = 300 }) => {
   const progress = (score / 100) * circumference;
   const dashOffset = circumference - progress;
   
+  // Gauge color based on score
+  const getGaugeColor = () => {
+    if (score <= 40) return '#C0392B'; // Red
+    if (score <= 70) return '#E67E22'; // Amber
+    return '#2D6A4F'; // Green
+  };
+  
   return (
     <svg width={size} height={size} className="mx-auto">
       {/* Background circle */}
@@ -30,13 +37,13 @@ const CircularGauge = ({ score, size = 300 }) => {
         cy={size / 2}
         r={radius}
         fill="none"
-        stroke="#2D6A4F"
+        stroke={getGaugeColor()}
         strokeWidth={strokeWidth}
         strokeDasharray={circumference}
         strokeDashoffset={dashOffset}
         strokeLinecap="round"
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
-        style={{ transition: 'stroke-dashoffset 2s ease-out' }}
+        style={{ transition: 'stroke-dashoffset 2s ease-out, stroke 0.5s ease' }}
       />
       
       {/* Center text */}
