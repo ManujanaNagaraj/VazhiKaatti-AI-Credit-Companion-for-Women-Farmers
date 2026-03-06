@@ -205,28 +205,28 @@ const OfficerDashboard = () => {
           {/* Applications Table */}
           <div className="rounded-xl shadow-lg overflow-hidden" style={{ backgroundColor: '#1e3a5f' }}>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full" style={{ minWidth: '800px' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#152943' }}>
-                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                    <th className="px-4 md:px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
                       Name
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                    <th className="px-4 md:px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
                       Village
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                    <th className="px-4 md:px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
                       Score
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                    <th className="px-4 md:px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
                       Grade
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                    <th className="px-4 md:px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
                       Scheme
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                    <th className="px-4 md:px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
                       Status
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
+                    <th className="px-4 md:px-6 py-4 text-left text-sm font-bold" style={{ color: '#D4A017' }}>
                       Actions
                     </th>
                   </tr>
@@ -239,15 +239,15 @@ const OfficerDashboard = () => {
                       style={{ borderColor: '#2D5A7B' }}
                     >
                       <td 
-                        className="px-6 py-4 text-sm font-medium" 
+                        className="px-4 md:px-6 py-4 text-sm font-medium" 
                         style={{ color: '#E8F4EA', fontFamily: 'Noto Sans Tamil, sans-serif' }}
                       >
                         {app.name}
                       </td>
-                      <td className="px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
+                      <td className="px-4 md:px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
                         {app.village}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 md:px-6 py-4">
                         <span 
                           className="inline-block px-3 py-1 rounded-full text-sm font-bold"
                           style={{
@@ -258,16 +258,16 @@ const OfficerDashboard = () => {
                           {app.score}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
+                      <td className="px-4 md:px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
                         {app.grade}
                       </td>
-                      <td className="px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
+                      <td className="px-4 md:px-6 py-4 text-sm" style={{ color: '#B8C5D0' }}>
                         {app.scheme_applied}
                       </td>
-                      <td className="px-6 py-4 text-sm font-semibold" style={{ color: '#E8F4EA' }}>
+                      <td className="px-4 md:px-6 py-4 text-sm font-semibold" style={{ color: '#E8F4EA' }}>
                         {app.status}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 md:px-6 py-4">
                         {app.status === 'Pending' ? (
                           <div className="flex gap-2">
                             <button
