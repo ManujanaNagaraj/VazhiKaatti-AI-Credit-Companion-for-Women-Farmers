@@ -159,6 +159,7 @@ const SchemeMatcher = () => {
         )}
       </div>
     </div>
+    </AnimatedPage>
   );
 };
 
