@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, FileText, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { LogOut, FileText, CheckCircle, Clock, XCircle, Search } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
 
 const OfficerDashboard = () => {
   const navigate = useNavigate();
+  
+  const [searchTerm, setSearchTerm] = useState('');
   
   const [applications, setApplications] = useState([
     { id: 1, name: 'கமலா தேவி', village: 'Thanjavur', score: 85, grade: 'Excellent', scheme_applied: 'PM-KISAN', status: 'Pending', applied_date: '2026-02-15' },
@@ -93,6 +95,30 @@ const OfficerDashboard = () => {
               <div className="text-sm font-semibold" style={{ color: '#E8F4EA' }}>
                 Rejected
               </div>
+            </div>
+          </div>
+
+          {/* Search and Filters */}
+          <div className="mb-6 flex flex-col md:flex-row gap-4">
+            {/* Search Bar */}
+            <div className="flex-1 relative">
+              <Search 
+                size={20} 
+                className="absolute left-3 top-1/2 transform -translate-y-1/2" 
+                style={{ color: '#6B7280' }} 
+              />
+              <input
+                type="text"
+                placeholder="Search by farmer name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 rounded-lg font-medium"
+                style={{ 
+                  backgroundColor: '#1e3a5f', 
+                  color: '#E8F4EA',
+                  border: '2px solid #2D5A7B'
+                }}
+              />
             </div>
           </div>
         </div>
