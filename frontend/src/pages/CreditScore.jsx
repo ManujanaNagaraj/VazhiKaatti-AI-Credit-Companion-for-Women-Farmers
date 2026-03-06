@@ -218,9 +218,15 @@ const CreditScore = () => {
     <AnimatedPage>
       <div className="min-h-screen py-12 px-4" style={{ backgroundColor: '#FAF7F0' }}>
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-center mb-8" style={{ color: '#1B4332' }}>
+          <motion.h1 
+            className="text-4xl font-bold text-center mb-8" 
+            style={{ color: '#1B4332' }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             Credit Score Result
-          </h1>
+          </motion.h1>
           
           {/* Gauge */}
           <motion.div 
