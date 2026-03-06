@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { TrendingUp, Users, Wallet } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
 
 // Circular SVG Gauge Component  
@@ -80,6 +81,27 @@ const GradeBadge = ({ score }) => {
     >
       <div className="text-xl font-bold">{grade.tamil}</div>
       <div className="text-sm opacity-90">{grade.english}</div>
+    </div>
+  );
+};
+
+// Factor Card Component
+const FactorCard = ({ icon: Icon, tamil, english, color }) => {
+  return (
+    <div className="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-xl transition-shadow">
+      <div 
+        className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
+        style={{ backgroundColor: `${color}20` }}
+      >
+        <Icon size={32} style={{ color: color }} />
+      </div>
+      <h3 
+        className="text-lg font-bold mb-1" 
+        style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+      >
+        {tamil}
+      </h3>
+      <p className="text-sm" style={{ color: '#6B4226' }}>{english}</p>
     </div>
   );
 };
@@ -210,6 +232,36 @@ const CreditScore = () => {
               </p>
             </div>
           )}
+          
+          {/* Contributing Factors */}
+          <div className="mb-8">
+            <h2 
+              className="text-2xl font-bold mb-6 text-center" 
+              style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+            >
+              உங்கள் மதிப்பெண்ணை அதிகரித்தவை
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <FactorCard 
+                icon={TrendingUp} 
+                tamil="நிலையான வருமானம்" 
+                english="Stable Income"
+                color="#27AE60"
+              />
+              <FactorCard 
+                icon={Users} 
+                tamil="குழு உறுப்பினர்" 
+                english="Group Membership"
+                color="#2D6A4F"
+              />
+              <FactorCard 
+                icon={Wallet} 
+                tamil="நிதி வரலாறு" 
+                english="Financial History"
+                color="#D4A017"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </AnimatedPage>
