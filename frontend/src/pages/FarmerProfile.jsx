@@ -8,6 +8,7 @@ const FarmerProfile = () => {
   const navigate = useNavigate();
   const [farmerData, setFarmerData] = useState(null);
   const [landRecords, setLandRecords] = useState(null);
+  const [govtSchemes, setGovtSchemes] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fetchingLand, setFetchingLand] = useState(false);
 
@@ -19,6 +20,12 @@ const FarmerProfile = () => {
       
       // Fetch land records from API
       fetchLandRecords();
+      
+      // Set mock government schemes data
+      setGovtSchemes({
+        pm_kisan: true,
+        shg_membership: true
+      });
     }
     setLoading(false);
   }, []);
@@ -199,9 +206,58 @@ const FarmerProfile = () => {
             )}
           </div>
 
-          {/* Placeholder for more cards */}
+          {/* Card 3 - Government Schemes */}
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold" style={{ color: '#1B4332' }}>
+                Government Schemes / அரசு திட்டங்கள்
+              </h3>
+              <div className="flex items-center space-x-1" style={{ color: '#2D6A4F' }}>
+                <CheckCircle className="h-5 w-5" />
+                <span className="text-sm font-semibold">✓ Verified</span>
+              </div>
+            </div>
+            
+            {govtSchemes ? (
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="border-l-4 pl-4" style={{ borderColor: '#D4A017' }}>
+                  <p className="text-sm" style={{ color: '#6B4226' }}>PM-KISAN Status</p>
+                  <div className="flex items-center space-x-2 mt-1">
+                    <div 
+                      className="px-3 py-1 rounded-full text-sm font-semibold"
+                      style={{ 
+                        backgroundColor: govtSchemes.pm_kisan ? '#D4F1DD' : '#FFE5E5',
+                        color: govtSchemes.pm_kisan ? '#2D6A4F' : '#C0392B'
+                      }}
+                    >
+                      {govtSchemes.pm_kisan ? '✓ Enrolled' : '✗ Not Enrolled'}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border-l-4 pl-4" style={{ borderColor: '#D4A017' }}>
+                  <p className="text-sm" style={{ color: '#6B4226' }}>SHG Membership / SHG உறுப்பினர்</p>
+                  <div className="flex items-center space-x-2 mt-1">
+                    <div 
+                      className="px-3 py-1 rounded-full text-sm font-semibold"
+                      style={{ 
+                        backgroundColor: govtSchemes.shg_membership ? '#D4F1DD' : '#FFE5E5',
+                        color: govtSchemes.shg_membership ? '#2D6A4F' : '#C0392B'
+                      }}
+                    >
+                      {govtSchemes.shg_membership ? '✓ Active Member' : '✗ Not a Member'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-center" style={{ color: '#6B4226' }}>Loading schemes data...</p>
+            )}
+          </div>
+
+          {/* Placeholder for actions */}
           <div className="text-center" style={{ color: '#6B4226' }}>
-            More information cards coming soon...
+            Action buttons coming soon...
           </div>
         </div>
       </div>
