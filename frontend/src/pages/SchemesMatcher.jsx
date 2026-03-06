@@ -81,6 +81,31 @@ const SchemesMatcher = () => {
     <AnimatedPage>
       <div className="min-h-screen py-12 px-4" style={{ backgroundColor: '#FAF7F0' }}>
         <div className="max-w-6xl mx-auto">
+          {/* Top Score Banner */}
+          <div 
+            className="mb-8 p-6 rounded-2xl shadow-lg text-center"
+            style={{ 
+              background: 'linear-gradient(135deg, #2D6A4F 0%, #1B4332 100%)',
+              border: '3px solid #D4A017'
+            }}
+          >
+            <p 
+              className="text-2xl font-bold mb-2" 
+              style={{ color: '#FAF7F0', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+            >
+              உங்கள் மதிப்பெண் <span style={{ color: '#D4A017', fontSize: '2rem' }}>{score}/100</span>
+            </p>
+            <p 
+              className="text-xl font-semibold" 
+              style={{ color: '#D4F1DD', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+            >
+              நீங்கள் இந்த திட்டங்களுக்கு தகுதியானவர்!
+            </p>
+            <p className="text-sm mt-2" style={{ color: '#E8F4EA' }}>
+              You are eligible for these schemes!
+            </p>
+          </div>
+
           <h1 className="text-4xl font-bold text-center mb-8" style={{ color: '#1B4332' }}>
             Matched Schemes
           </h1>
