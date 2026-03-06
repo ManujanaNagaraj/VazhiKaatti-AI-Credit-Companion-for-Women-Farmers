@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Award, FileText, ExternalLink, CheckCircle, IndianRupee } from 'lucide-react';
 import TamilText from '../components/TamilText';
+import AnimatedPage from '../components/AnimatedPage';
 
 const SchemeMatcher = () => {
   const [schemes, setSchemes] = useState([]);
@@ -93,7 +94,8 @@ const SchemeMatcher = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 px-4">
+    <AnimatedPage>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
