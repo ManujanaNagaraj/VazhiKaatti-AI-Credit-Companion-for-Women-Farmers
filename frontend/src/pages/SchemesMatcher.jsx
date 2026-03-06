@@ -227,6 +227,22 @@ const SchemesMatcher = () => {
               <span>WhatsApp இல் பகிர்</span>
             </button>
           </div>
+
+          {/* Contact Bank Officer Button */}
+          <div className="flex justify-center">
+            <button
+              onClick={() => navigate('/contact')}
+              className="flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              style={{ 
+                backgroundColor: '#D4A017', 
+                color: '#1B4332',
+                fontFamily: 'Noto Sans Tamil, sans-serif'
+              }}
+            >
+              <Phone size={24} />
+              <span>வங்கி அதிகாரியை தொடர்பு கொள்ளுங்கள்</span>
+            </button>
+          </div>
         </div>
       </div>
     </AnimatedPage>
