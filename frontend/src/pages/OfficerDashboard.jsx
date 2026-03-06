@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, FileText, CheckCircle, Clock, XCircle, Search, Check, X, Download } from 'lucide-react';
+import { motion } from 'framer-motion';
 import AnimatedPage from '../components/AnimatedPage';
 
 const OfficerDashboard = () => {
@@ -97,7 +98,13 @@ const OfficerDashboard = () => {
         <div className="max-w-7xl mx-auto px-4 py-8">
           {/* Stat Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0 }}
+              className="rounded-xl p-6 shadow-lg" 
+              style={{ backgroundColor: '#1e3a5f' }}
+            >
               <div className="flex items-center justify-between mb-3">
                 <FileText size={36} style={{ color: '#D4A017' }} />
               </div>
@@ -109,7 +116,13 @@ const OfficerDashboard = () => {
               </div>
             </div>
             
-            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="rounded-xl p-6 shadow-lg" 
+              style={{ backgroundColor: '#1e3a5f' }}
+            >
               <div className="flex items-center justify-between mb-3">
                 <CheckCircle size={36} style={{ color: '#27AE60' }} />
               </div>
@@ -119,9 +132,15 @@ const OfficerDashboard = () => {
               <div className="text-sm font-semibold" style={{ color: '#E8F4EA' }}>
                 Approved
               </div>
-            </div>
+            </motion.div>
             
-            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="rounded-xl p-6 shadow-lg" 
+              style={{ backgroundColor: '#1e3a5f' }}
+            >
               <div className="flex items-center justify-between mb-3">
                 <Clock size={36} style={{ color: '#E67E22' }} />
               </div>
@@ -131,9 +150,15 @@ const OfficerDashboard = () => {
               <div className="text-sm font-semibold" style={{ color: '#E8F4EA' }}>
                 Pending
               </div>
-            </div>
+            </motion.div>
             
-            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="rounded-xl p-6 shadow-lg" 
+              style={{ backgroundColor: '#1e3a5f' }}
+            >
               <div className="flex items-center justify-between mb-3">
                 <XCircle size={36} style={{ color: '#C0392B' }} />
               </div>
@@ -143,7 +168,7 @@ const OfficerDashboard = () => {
               <div className="text-sm font-semibold" style={{ color: '#E8F4EA' }}>
                 Rejected
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Search and Filters */}
@@ -232,9 +257,12 @@ const OfficerDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredApplications.map((app) => (
-                    <tr 
+                  {filteredApplications.map((app, index) => (
+                    <motion.tr 
                       key={app.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
                       className="border-t"
                       style={{ borderColor: '#2D5A7B' }}
                     >
@@ -293,7 +321,7 @@ const OfficerDashboard = () => {
                           </span>
                         )}
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>
