@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { TrendingUp, Users, Wallet } from 'lucide-react';
+import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import AnimatedPage from '../components/AnimatedPage';
 
@@ -222,7 +223,17 @@ const CreditScore = () => {
           </h1>
           
           {/* Gauge */}
-          <div className="bg-white rounded-3xl shadow-2xl p-12 mb-8">
+          <motion.div 
+            className="bg-white rounded-3xl shadow-2xl p-12 mb-8"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ 
+              type: "spring", 
+              stiffness: 260, 
+              damping: 20,
+              duration: 0.8 
+            }}
+          >
             <CircularGauge score={displayScore} />
             <p 
               className="text-center mt-4 text-xl font-semibold" 
@@ -235,7 +246,7 @@ const CreditScore = () => {
             <div className="flex justify-center mt-6">
               <GradeBadge score={displayScore} />
             </div>
-          </div>
+          </motion.div>
           
           {/* Tamil Explanation */}
           {(scoreData.explanation || scoreData.tamil_explanation) && (
