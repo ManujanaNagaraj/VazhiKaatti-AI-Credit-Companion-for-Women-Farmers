@@ -45,7 +45,44 @@ const OfficerDashboard = () => {
         </header>
 
         <div className="max-w-7xl mx-auto px-4 py-8">
-          {/* Content will go here */}
+          {/* Stat Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+              <div className="text-3xl font-bold mb-2" style={{ color: '#D4A017' }}>
+                {applications.length}
+              </div>
+              <div className="text-sm font-semibold" style={{ color: '#E8F4EA' }}>
+                Total Applications
+              </div>
+            </div>
+            
+            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+              <div className="text-3xl font-bold mb-2" style={{ color: '#27AE60' }}>
+                {applications.filter(app => app.status === 'Approved').length}
+              </div>
+              <div className="text-sm font-semibold" style={{ color: '#E8F4EA' }}>
+                Approved
+              </div>
+            </div>
+            
+            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+              <div className="text-3xl font-bold mb-2" style={{ color: '#E67E22' }}>
+                {applications.filter(app => app.status === 'Pending').length}
+              </div>
+              <div className="text-sm font-semibold" style={{ color: '#E8F4EA' }}>
+                Pending
+              </div>
+            </div>
+            
+            <div className="rounded-xl p-6 shadow-lg" style={{ backgroundColor: '#1e3a5f' }}>
+              <div className="text-3xl font-bold mb-2" style={{ color: '#C0392B' }}>
+                {applications.filter(app => app.status === 'Rejected').length}
+              </div>
+              <div className="text-sm font-semibold" style={{ color: '#E8F4EA' }}>
+                Rejected
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </AnimatedPage>
