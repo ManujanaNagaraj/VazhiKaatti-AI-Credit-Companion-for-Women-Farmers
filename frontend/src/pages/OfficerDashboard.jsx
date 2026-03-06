@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, FileText, CheckCircle, Clock, XCircle, Search, Check, X } from 'lucide-react';
+import { LogOut, FileText, CheckCircle, Clock, XCircle, Search, Check, X, Download } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
 
 const OfficerDashboard = () => {
@@ -43,6 +43,30 @@ const OfficerDashboard = () => {
         app.id === id ? { ...app, status: 'Rejected' } : app
       ));
     }
+  };
+
+  const exportToCSV = () => {
+    const headers = ['Name', 'Village', 'Score', 'Grade', 'Scheme', 'Status', 'Applied Date'];
+    const csvData = filteredApplications.map(app => [
+      app.name,
+      app.village,
+      app.score,
+      app.grade,
+      app.scheme_applied,
+      app.status,
+      app.applied_date
+    ]);
+    
+    const csvContent = [
+      headers.join(','),
+      ...csvData.map(row => row.join(','))
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `farmer_applications_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
   };
 
   return (
@@ -164,6 +188,18 @@ const OfficerDashboard = () => {
                 <option value="Poor">Poor</option>
               </select>
             </div>
+          </div>
+
+          {/* Export CSV Button */}
+          <div className="mb-6 flex justify-end">
+            <button
+              onClick={exportToCSV}
+              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105"
+              style={{ backgroundColor: '#D4A017', color: '#0F1B2D' }}
+            >
+              <Download size={20} />
+              Export CSV
+            </button>
           </div>
 
           {/* Applications Table */}
