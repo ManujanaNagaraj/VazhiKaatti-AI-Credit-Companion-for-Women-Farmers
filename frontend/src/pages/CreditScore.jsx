@@ -62,6 +62,28 @@ const CircularGauge = ({ score, size = 300 }) => {
   );
 };
 
+// Grade Badge Component
+const GradeBadge = ({ score }) => {
+  const getGrade = () => {
+    if (score <= 40) return { tamil: 'மோசம்', english: 'Poor', bg: '#C0392B', text: '#FFF' };
+    if (score <= 70) return { tamil: 'சாதாரண', english: 'Fair', bg: '#E67E22', text: '#FFF' };
+    if (score <= 85) return { tamil: 'நல்லது', english: 'Good', bg: '#27AE60', text: '#FFF' };
+    return { tamil: 'சிறந்தது', english: 'Excellent', bg: '#16A085', text: '#FFF' };
+  };
+  
+  const grade = getGrade();
+  
+  return (
+    <div 
+      className="inline-block px-6 py-3 rounded-full shadow-lg"
+      style={{ backgroundColor: grade.bg, color: grade.text }}
+    >
+      <div className="text-xl font-bold">{grade.tamil}</div>
+      <div className="text-sm opacity-90">{grade.english}</div>
+    </div>
+  );
+};
+
 
 const CreditScore = () => {
   const navigate = useNavigate();
@@ -164,14 +186,16 @@ const CreditScore = () => {
             >
               உங்கள் மதிப்பெண்
             </p>
+            
+            {/* Grade Badge */}
+            <div className="flex justify-center mt-6">
+              <GradeBadge score={displayScore} />
+            </div>
           </div>
         </div>
       </div>
     </AnimatedPage>
   );
 };
-
-export default CreditScore;
-
 
 export default CreditScore;
