@@ -255,9 +255,39 @@ const FarmerProfile = () => {
             )}
           </div>
 
-          {/* Placeholder for actions */}
-          <div className="text-center" style={{ color: '#6B4226' }}>
-            Action buttons coming soon...
+          {/* Bottom Actions */}
+          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+            <h3 
+              className="text-2xl font-bold mb-6" 
+              style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
+            >
+              இது சரியா?
+            </h3>
+            <p className="text-lg mb-6" style={{ color: '#6B4226' }}>
+              Is this information correct?
+            </p>
+            
+            <div className="flex flex-col md:flex-row gap-4 justify-center">
+              <button
+                onClick={() => navigate('/questions')}
+                className="px-8 py-3 rounded-lg font-semibold text-lg transition-all hover:scale-105"
+                style={{ backgroundColor: '#2D6A4F', color: '#FAF7F0' }}
+              >
+                ✓ Yes, Continue / ஆம், தொடரவும்
+              </button>
+              
+              <button
+                onClick={() => navigate('/login')}
+                className="px-8 py-3 rounded-lg font-semibold text-lg border-2 transition-all hover:scale-105"
+                style={{ 
+                  borderColor: '#D4A017', 
+                  color: '#1B4332',
+                  backgroundColor: 'transparent'
+                }}
+              >
+                ✎ Edit / திருத்து
+              </button>
+            </div>
           </div>
         </div>
       </div>
