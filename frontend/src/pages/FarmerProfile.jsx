@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, CheckCircle, Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import AnimatedPage from '../components/AnimatedPage';
 import axios from 'axios';
 
@@ -50,6 +51,29 @@ const FarmerProfile = () => {
     }
   };
 
+  // Animation variants for staggered card entrance
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: 'easeOut'
+      }
+    }
+  };
+
   if (loading) {
     return (
       <AnimatedPage>
@@ -88,8 +112,14 @@ const FarmerProfile = () => {
             Farmer Profile
           </h1>
 
-          {/* Profile Header Card */}
-          <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
+          {/* Cards Container with Stagger Animation */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {/* Profile Header Card */}
+            <motion.div variants={cardVariants} className="bg-white rounded-xl shadow-lg p-8 mb-6">
             <div className="flex flex-col items-center">
               {/* Photo Placeholder Circle */}
               <div 
@@ -117,10 +147,10 @@ const FarmerProfile = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 1 - Identity Information */}
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <motion.div variants={cardVariants} className="bg-white rounded-xl shadow-lg p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold" style={{ color: '#1B4332' }}>
                 Identity Information
@@ -160,10 +190,10 @@ const FarmerProfile = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 2 - Land Records */}
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <motion.div variants={cardVariants} className="bg-white rounded-xl shadow-lg p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold" style={{ color: '#1B4332' }}>
                 Land Records / நில பதிவுகள்
@@ -204,10 +234,10 @@ const FarmerProfile = () => {
             ) : (
               <p className="text-center" style={{ color: '#6B4226' }}>Loading land records...</p>
             )}
-          </div>
+          </motion.div>
 
           {/* Card 3 - Government Schemes */}
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+          <motion.div variants={cardVariants} className="bg-white rounded-xl shadow-lg p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold" style={{ color: '#1B4332' }}>
                 Government Schemes / அரசு திட்டங்கள்
@@ -253,10 +283,10 @@ const FarmerProfile = () => {
             ) : (
               <p className="text-center" style={{ color: '#6B4226' }}>Loading schemes data...</p>
             )}
-          </div>
+          </motion.div>
 
           {/* Bottom Actions */}
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+          <motion.div variants={cardVariants} className="bg-white rounded-xl shadow-lg p-8 text-center">
             <h3 
               className="text-2xl font-bold mb-6" 
               style={{ color: '#1B4332', fontFamily: 'Noto Sans Tamil, sans-serif' }}
@@ -288,7 +318,8 @@ const FarmerProfile = () => {
                 ✎ Edit / திருத்து
               </button>
             </div>
-          </div>
+          </motion.div>
+          </motion.div>
         </div>
       </div>
     </AnimatedPage>
