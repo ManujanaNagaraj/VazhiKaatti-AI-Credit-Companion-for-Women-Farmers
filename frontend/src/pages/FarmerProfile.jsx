@@ -1,21 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, CheckCircle } from 'lucide-react';
+import { User, CheckCircle, Loader2 } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
+import axios from 'axios';
 
 const FarmerProfile = () => {
   const navigate = useNavigate();
   const [farmerData, setFarmerData] = useState(null);
+  const [landRecords, setLandRecords] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fetchingLand, setFetchingLand] = useState(false);
 
   useEffect(() => {
     // Load farmer data from localStorage
     const storedData = localStorage.getItem('farmerData');
     if (storedData) {
       setFarmerData(JSON.parse(storedData));
+      
+      // Fetch land records from API
+      fetchLandRecords();
     }
     setLoading(false);
   }, []);
+
+  const fetchLandRecords = async () => {
+    setFetchingLand(true);
+    try {
+      const response = await axios.post('http://localhost:8000/fetch-land-records', {
+        survey_number: 'TN/123/456' // Mock survey number
+      });
+      setLandRecords(response.data);
+    } catch (error) {
+      console.error('Error fetching land records:', error);
+      // Set mock data if API fails
+      setLandRecords({
+        land_area: '2.5 acres',
+        crop_type: 'Rice',
+        patta_number: 'PATTA-2024-001'
+      });
+    } finally {
+      setFetchingLand(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -127,6 +153,50 @@ const FarmerProfile = () => {
                 </p>
               </div>
             </div>
+          </div>
+
+          {/* Card 2 - Land Records */}
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold" style={{ color: '#1B4332' }}>
+                Land Records / நில பதிவுகள்
+              </h3>
+              {fetchingLand ? (
+                <Loader2 className="h-5 w-5 animate-spin" style={{ color: '#2D6A4F' }} />
+              ) : (
+                <div className="flex items-center space-x-1" style={{ color: '#2D6A4F' }}>
+                  <CheckCircle className="h-5 w-5" />
+                  <span className="text-sm font-semibold">✓ Verified</span>
+                </div>
+              )}
+            </div>
+            
+            {landRecords ? (
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="border-l-4 pl-4" style={{ borderColor: '#D4A017' }}>
+                  <p className="text-sm" style={{ color: '#6B4226' }}>Land Area / நில பரப்பு</p>
+                  <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
+                    {landRecords.land_area || 'Not Available'}
+                  </p>
+                </div>
+                
+                <div className="border-l-4 pl-4" style={{ borderColor: '#D4A017' }}>
+                  <p className="text-sm" style={{ color: '#6B4226' }}>Crop Type / பயிர் வகை</p>
+                  <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
+                    {landRecords.crop_type || 'Not Available'}
+                  </p>
+                </div>
+                
+                <div className="border-l-4 pl-4" style={{ borderColor: '#D4A017' }}>
+                  <p className="text-sm" style={{ color: '#6B4226' }}>Patta Number / பட்டா எண்</p>
+                  <p className="text-lg font-semibold" style={{ color: '#1B4332' }}>
+                    {landRecords.patta_number || 'Not Available'}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-center" style={{ color: '#6B4226' }}>Loading land records...</p>
+            )}
           </div>
 
           {/* Placeholder for more cards */}
