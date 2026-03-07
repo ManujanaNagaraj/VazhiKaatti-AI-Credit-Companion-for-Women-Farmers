@@ -42,7 +42,7 @@ const LandingPage = () => {
       <div className="landing-page">
         {/* Animated gradient background */}
         <div className="gradient-bg"></div>
-        
+
         {/* Grain texture overlay */}
         <div className="grain-overlay"></div>
 
@@ -57,23 +57,23 @@ const LandingPage = () => {
             <motion.h1 className="main-title" variants={itemVariants}>
               VazhiKaatti
             </motion.h1>
-            
+
             <motion.h2 className="tamil-subtitle" variants={itemVariants}>
               வழிகாட்டி
             </motion.h2>
-            
+
             <motion.p className="tamil-tagline" variants={itemVariants}>
               உங்கள் உழைப்புக்கு நீதியான கடன்
             </motion.p>
-            
+
             <motion.p className="english-tagline" variants={itemVariants}>
               AI-Powered Credit Scoring for Women Farmers of Tamil Nadu
             </motion.p>
-            
+
             <motion.button
               className="cta-button"
               variants={itemVariants}
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/profile')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

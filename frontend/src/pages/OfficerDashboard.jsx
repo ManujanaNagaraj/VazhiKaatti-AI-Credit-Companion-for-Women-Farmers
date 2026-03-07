@@ -6,10 +6,10 @@ import AnimatedPage from '../components/AnimatedPage';
 
 const OfficerDashboard = () => {
   const navigate = useNavigate();
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [gradeFilter, setGradeFilter] = useState('All');
-  
+
   const [applications, setApplications] = useState([
     { id: 1, name: 'கமலா தேவி', village: 'Thanjavur', score: 85, grade: 'Excellent', scheme_applied: 'PM-KISAN', status: 'Pending', applied_date: '2026-02-15' },
     { id: 2, name: 'செல்வி முத்து', village: 'Trichy', score: 72, grade: 'Good', scheme_applied: 'Kisan Credit Card', status: 'Approved', applied_date: '2026-02-20' },
@@ -32,7 +32,7 @@ const OfficerDashboard = () => {
 
   const handleApprove = (id) => {
     if (window.confirm('Approve this application? / இந்த விண்ணப்பத்தை ஒப்புதல் அளிக்கவா?')) {
-      setApplications(applications.map(app => 
+      setApplications(applications.map(app =>
         app.id === id ? { ...app, status: 'Approved' } : app
       ));
     }
@@ -40,7 +40,7 @@ const OfficerDashboard = () => {
 
   const handleReject = (id) => {
     if (window.confirm('Reject this application? / இந்த விண்ணப்பத்தை நிராகரிக்கவா?')) {
-      setApplications(applications.map(app => 
+      setApplications(applications.map(app =>
         app.id === id ? { ...app, status: 'Rejected' } : app
       ));
     }
@@ -57,12 +57,12 @@ const OfficerDashboard = () => {
       app.status,
       app.applied_date
     ]);
-    
+
     const csvContent = [
       headers.join(','),
       ...csvData.map(row => row.join(','))
     ].join('\n');
-    
+
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -77,14 +77,17 @@ const OfficerDashboard = () => {
         <header className="border-b" style={{ borderColor: '#1e3a5f' }}>
           <div className="max-w-7xl mx-auto px-4 py-6">
             <div className="flex justify-between items-center">
-              <h1 
-                className="text-3xl font-bold" 
+              <h1
+                className="text-3xl font-bold"
                 style={{ color: '#D4A017', fontFamily: 'Noto Sans Tamil, sans-serif' }}
               >
                 VazhiKaatti — அதிகாரி போர்டல்
               </h1>
               <button
-                onClick={() => navigate('/login')}
+                onClick={() => {
+                  localStorage.clear();
+                  navigate('/');
+                }}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all hover:scale-105"
                 style={{ backgroundColor: '#1e3a5f', color: '#D4A017' }}
               >
@@ -98,11 +101,11 @@ const OfficerDashboard = () => {
         <div className="max-w-7xl mx-auto px-4 py-8">
           {/* Stat Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0 }}
-              className="rounded-xl p-6 shadow-lg" 
+              className="rounded-xl p-6 shadow-lg"
               style={{ backgroundColor: '#1e3a5f' }}
             >
               <div className="flex items-center justify-between mb-3">
@@ -114,13 +117,13 @@ const OfficerDashboard = () => {
               <div className="text-sm font-semibold" style={{ color: '#E8F4EA' }}>
                 Total Applications
               </div>
-            </div>
-            
-            <motion.div 
+            </motion.div>
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="rounded-xl p-6 shadow-lg" 
+              className="rounded-xl p-6 shadow-lg"
               style={{ backgroundColor: '#1e3a5f' }}
             >
               <div className="flex items-center justify-between mb-3">
@@ -133,12 +136,12 @@ const OfficerDashboard = () => {
                 Approved
               </div>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="rounded-xl p-6 shadow-lg" 
+              className="rounded-xl p-6 shadow-lg"
               style={{ backgroundColor: '#1e3a5f' }}
             >
               <div className="flex items-center justify-between mb-3">
@@ -151,12 +154,12 @@ const OfficerDashboard = () => {
                 Pending
               </div>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="rounded-xl p-6 shadow-lg" 
+              className="rounded-xl p-6 shadow-lg"
               style={{ backgroundColor: '#1e3a5f' }}
             >
               <div className="flex items-center justify-between mb-3">
@@ -175,10 +178,10 @@ const OfficerDashboard = () => {
           <div className="mb-6 flex flex-col md:flex-row gap-4">
             {/* Search Bar */}
             <div className="flex-1 relative">
-              <Search 
-                size={20} 
-                className="absolute left-3 top-1/2 transform -translate-y-1/2" 
-                style={{ color: '#6B7280' }} 
+              <Search
+                size={20}
+                className="absolute left-3 top-1/2 transform -translate-y-1/2"
+                style={{ color: '#6B7280' }}
               />
               <input
                 type="text"
@@ -186,8 +189,8 @@ const OfficerDashboard = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 rounded-lg font-medium"
-                style={{ 
-                  backgroundColor: '#1e3a5f', 
+                style={{
+                  backgroundColor: '#1e3a5f',
                   color: '#E8F4EA',
                   border: '2px solid #2D5A7B'
                 }}
@@ -200,8 +203,8 @@ const OfficerDashboard = () => {
                 value={gradeFilter}
                 onChange={(e) => setGradeFilter(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg font-medium"
-                style={{ 
-                  backgroundColor: '#1e3a5f', 
+                style={{
+                  backgroundColor: '#1e3a5f',
                   color: '#E8F4EA',
                   border: '2px solid #2D5A7B'
                 }}
@@ -258,7 +261,7 @@ const OfficerDashboard = () => {
                 </thead>
                 <tbody>
                   {filteredApplications.map((app, index) => (
-                    <motion.tr 
+                    <motion.tr
                       key={app.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -267,8 +270,8 @@ const OfficerDashboard = () => {
                       style={{ borderColor: '#2D5A7B', backgroundColor: 'transparent' }}
                       whileHover={{ backgroundColor: '#1a2f47' }}
                     >
-                      <td 
-                        className="px-4 md:px-6 py-4 text-sm font-medium" 
+                      <td
+                        className="px-4 md:px-6 py-4 text-sm font-medium"
                         style={{ color: '#E8F4EA', fontFamily: 'Noto Sans Tamil, sans-serif' }}
                       >
                         {app.name}
@@ -277,7 +280,7 @@ const OfficerDashboard = () => {
                         {app.village}
                       </td>
                       <td className="px-4 md:px-6 py-4">
-                        <span 
+                        <span
                           className="inline-block px-3 py-1 rounded-full text-sm font-bold"
                           style={{
                             backgroundColor: app.score <= 40 ? '#C0392B' : app.score <= 70 ? '#E67E22' : '#27AE60',
