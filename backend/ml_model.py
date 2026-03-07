@@ -60,7 +60,20 @@ class CreditScoreModel:
         
         if not os.path.exists(data_path):
             print("ERROR: Training data not found at", data_path)
-           plit data into training and testing sets
+            print("Generating sample training data...")
+            self.generate_sample_data()
+        
+        # Load data
+        print(f"Loading training data from {data_path}")
+        data = pd.read_csv(data_path)
+        
+        print(f"Total samples: {len(data)}")
+        
+        # Prepare features and target
+        X = data[self.feature_names].values
+        y = data['credit_score'].values
+        
+        # Split data into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=42, stratify=None
         )
@@ -88,7 +101,78 @@ class CreditScoreModel:
         print("✓ Model training complete")
         
         # Evaluate model
-        y_pred = self.model.farmer_data: dict) -> int:
+        y_pred = self.model.predict(X_test_scaled)
+        accuracy = accuracy_score(y_test, y_pred)
+        report = classification_report(y_test, y_pred)
+        
+        print(f"\nModel Accuracy: {accuracy:.2%}")
+        print("\nClassification Report:")
+        print(report)
+        
+        self.accuracy = accuracy
+        
+        # Save model and scaler
+        os.makedirs('models', exist_ok=True)
+        joblib.dump(self.model, 'models/credit_model.pkl')
+        joblib.dump(self.scaler, 'models/scaler.pkl')
+        print("\n✓ Model and scaler saved successfully")
+        
+        return accuracy, report
+    
+    def generate_sample_data(self):
+        """Generate sample training data if not exists"""
+        import random
+        import numpy as np
+        
+        os.makedirs('data', exist_ok=True)
+        
+        print("Generating 1000 sample records...")
+        
+        records = []
+        for _ in range(1000):
+            years_farming = random.randint(1, 30)
+            crop_type = random.randint(0, 3)
+            annual_income = random.randint(20000, 300000)
+            shg_member = random.randint(0, 1)
+            pm_kisan = random.randint(0, 1)
+            bank_account = random.randint(0, 1)
+            existing_loans = random.randint(0, 3)
+            land_area = round(random.uniform(0.5, 10.0), 2)
+            crop_insurance = random.randint(0, 1)
+            repayment_history = random.randint(0, 3)
+            
+            # Calculate score based on factors
+            score = 30  # Base score
+            score += min(years_farming * 2, 40)
+            score += min(annual_income / 3000, 20)
+            score += shg_member * 10
+            score += pm_kisan * 5
+            score += bank_account * 5
+            score -= existing_loans * 5
+            score += min(land_area * 3, 15)
+            score += crop_insurance * 5
+            score += repayment_history * 10
+            score = max(0, min(100, int(score)))
+            
+            records.append({
+                'years_of_farming': years_farming,
+                'crop_type': crop_type,
+                'annual_income_inr': annual_income,
+                'shg_member': shg_member,
+                'pm_kisan_registered': pm_kisan,
+                'has_bank_account': bank_account,
+                'existing_loans': existing_loans,
+                'land_area_acres': land_area,
+                'crop_insurance': crop_insurance,
+                'repayment_history': repayment_history,
+                'credit_score': score
+            })
+        
+        df = pd.DataFrame(records)
+        df.to_csv('data/training_data.csv', index=False)
+        print("✓ Sample data generated")
+    
+    def predict_score(self, farmer_data: dict) -> int:
         """
         Predict credit score from farmer data
         
@@ -109,7 +193,38 @@ class CreditScoreModel:
                 'existing_loans': 1,
                 'land_area_acres': 2.5,
                 'crop_insurance': 1,
-        get_feature_importance(self) -> Dict[str, float]:
+                'repayment_history': 3
+            }
+        """
+        if self.model is None:
+            raise ValueError("Model not trained yet")
+        
+        # Prepare features in correct order
+        features = np.array([[
+            farmer_data.get('years_of_farming', 0),
+            farmer_data.get('crop_type', 0),
+            farmer_data.get('annual_income_inr', 0),
+            int(farmer_data.get('shg_member', 0)),
+            int(farmer_data.get('pm_kisan_registered', 0)),
+            int(farmer_data.get('has_bank_account', 0)),
+            farmer_data.get('existing_loans', 0),
+            farmer_data.get('land_area_acres', 0),
+            int(farmer_data.get('crop_insurance', 0)),
+            farmer_data.get('repayment_history', 0)
+        ]])
+        
+        # Scale features
+        features_scaled = self.scaler.transform(features)
+        
+        # Predict
+        score = int(self.model.predict(features_scaled)[0])
+        
+        # Ensure score is in valid range
+        score = max(0, min(100, score))
+        
+        return score
+    
+    def get_feature_importance(self) -> Dict[str, float]:
         """
         Get feature importance scores from the trained model
         
@@ -143,32 +258,9 @@ class CreditScoreModel:
             print(f"{i}. {feature:25s} {score:.4f} {bar}")
         
         print(f"{'='*60}\n")
-            float(answers.get('land_size', 2.0)),
-            float(answers.get('annual_income', 50000)),
-            int(answers.get('age', 35)),
-            self.encode_education(answers.get('education_level', 'primary')),
-            int(answers.get('family_size', 4)),
-            int(answers.get('livestock_owned', 2)),
-            int(answers.get('years_farming', 10)),
-            self.encode_loan_history(answers.get('loan_history', 'none')),
-            float(answers.get('savings_amount', 10000)),
-            int(answers.get('group_membership', 1))
-        ]
     
-    def encode_education(self, level: str) -> int:
-        """Encode education level"""
-        levels = {
-            'none': 0,
-            'primary': 1,
-            'middle': 2,
-            'high_school': 3,
-            'college': 4
-        }
-        return levels.get(level, 1)
-    
-    def encode_loan_history(self, history: str) -> int:
-        """Encode loan repayment history"""
-        his
+    def get_category(self, score: int) -> str:
+        """
         Get credit category based on score
         
         Args:
@@ -234,35 +326,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main(
-        base_score += min(features[1] / 10000, 150)
-        
-        # Education factor
-        base_score += features[3] * 20
-        
-        # Loan history factor
-        base_score += features[7] * 30
-        
-        # Group membership factor
-        base_score += features[9] * 40
-        
-        return base_score
-    
-    def get_category(self, score: int) -> str:
-        """Get credit category based on score"""
-        if score >= 750:
-            return "Excellent"
-        elif score >= 650:
-            return "Good"
-        elif score >= 550:
-            return "Fair"
-        else:
-            return "Needs Improvement"
-    
-    def get_feature_importance(self):
-        """Get feature importance scores"""
-        if self.model is None:
-            return {}
-        
-        importance = self.model.feature_importances_
-        return dict(zip(self.feature_names, importance))
+    main()

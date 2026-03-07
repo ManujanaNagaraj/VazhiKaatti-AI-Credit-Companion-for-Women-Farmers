@@ -3,13 +3,14 @@ VazhiKaatti - Main Backend Server
 AI Credit Companion for Women Farmers in Tamil Nadu
 """
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Header
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import uvicorn
 import joblib
 import os
-from typing import List
+import json
+from typing import List, Optional, Dict, Any
 
 from models import (
     AadhaarVerifyRequest,
@@ -23,7 +24,54 @@ from models import (
     SchemeInfo,
     MatchSchemesResponse
 )
-from schemes import get_schemes_by_score, format_scheme_for_api
+from crop_predictor import get_predictor
+from weather_risk import get_weather_assessor
+
+# Admin password for scheme management (in production, use environment variable)
+ADMIN_PASSWORD = "vazhikaatti_admin_2026"
+SCHEMES_FILE_PATH = os.path.join("data", "schemes.json")
+
+
+def load_schemes() -> List[Dict]:
+    """Load schemes from JSON file"""
+    try:
+        if not os.path.exists(SCHEMES_FILE_PATH):
+            return []
+        with open(SCHEMES_FILE_PATH, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error loading schemes: {e}")
+        return []
+
+
+def save_schemes(schemes: List[Dict]) -> bool:
+    """Save schemes to JSON file"""
+    try:
+        os.makedirs(os.path.dirname(SCHEMES_FILE_PATH), exist_ok=True)
+        with open(SCHEMES_FILE_PATH, 'w', encoding='utf-8') as f:
+            json.dump(schemes, f, ensure_ascii=False, indent=2)
+        return True
+    except Exception as e:
+        print(f"Error saving schemes: {e}")
+        return False
+
+
+def verify_admin_password(password: Optional[str]) -> bool:
+    """Verify admin password"""
+    return password == ADMIN_PASSWORD
+
+
+def get_schemes_by_score(score: int, limit: int = 3) -> List[Dict]:
+    """Get matching schemes based on credit score - reads from JSON file"""
+    schemes = load_schemes()
+    matching_schemes = [
+        scheme for scheme in schemes
+        if scheme.get('min_score', 0) <= score <= scheme.get('max_score', 100)
+    ]
+    
+    # Sort by min_score descending and return top matches
+    matching_schemes.sort(key=lambda x: x.get('min_score', 0), reverse=True)
+    return matching_schemes[:limit]
 
 
 @asynccontextmanager
@@ -56,7 +104,7 @@ app = FastAPI(
 # CORS configuration - Allow requests from React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -74,7 +122,14 @@ async def root():
             "verify_aadhaar": "/verify-aadhaar",
             "fetch_land_records": "/fetch-land-records",
             "predict_score": "/predict-score",
-            "match_schemes": "/match-schemes"
+            "match_schemes": "/match-schemes (auto-updates from JSON)",
+            "admin_get_schemes": "/admin/all-schemes (requires password)",
+            "admin_update_scheme": "/admin/update-scheme (requires password)"
+        },
+        "admin_info": {
+            "password_header": "X-Admin-Password",
+            "schemes_file": "data/schemes.json",
+            "note": "Schemes auto-update without server restart!"
         }
     }
 
@@ -186,6 +241,16 @@ async def predict_score(features: FarmerFeatures):
         score = int(model.predict(scaled_features)[0])
         score = max(0, min(100, score))  # Clamp to 0-100
         
+        # Get weather risk assessment (use district from farmer data if available)
+        district = getattr(features, 'district', 'coimbatore')
+        weather_assessor = get_weather_assessor()
+        weather_risk = weather_assessor.assess_district_risk(district)
+        
+        # Apply weather risk adjustment to score
+        original_score = score
+        score = score + weather_risk['risk_score']
+        score = max(0, min(100, score))  # Clamp to 0-100
+        
         # Determine grade
         if score >= 81:
             grade = "Excellent"
@@ -200,16 +265,29 @@ async def predict_score(features: FarmerFeatures):
             grade = "Poor"
             tamil_grade = "மேம்படுத்த வேண்டும்"
         
-        # Tamil explanation
-        tamil_explanation = f"உங்கள் கடன் மதிப்பெண்: {score}/100 - {tamil_grade}. இந்த மதிப்பெண் உங்கள் விவசாய அனுபவம், வருமானம் மற்றும் நிதி நடத்தையை அடிப்படையாகக் கொண்டது."
+        # Tamil explanation with weather risk
+        weather_impact_text = ""
+        if weather_risk['risk_score'] != 0:
+            weather_impact_text = f" {weather_risk['impact_message']}."
+        tamil_explanation = f"உங்கள் கடன் மதிப்பெண்: {score}/100 - {tamil_grade}. இந்த மதிப்பெண் உங்கள் விவசாய அனுபவம், வருமானம் மற்றும் நிதி நடத்தையை அடிப்படையாகக் கொண்டது.{weather_impact_text}"
         
         # Get feature importance and determine top factors
         feature_importance = model.feature_importances_
         importance_dict = dict(zip(feature_names, feature_importance))
         sorted_features = sorted(importance_dict.items(), key=lambda x: x[1], reverse=True)
         
-        # Generate top 3 factors
+        # Generate factors (including weather risk)
         factors = []
+        
+        # Weather Risk Factor (if significant impact)
+        if weather_risk['risk_score'] != 0:
+            impact_type = "Positive" if weather_risk['risk_score'] > 0 else "Negative"
+            weather_factor_text = f"வானிலை அபாயம்: {weather_risk['risk_type_tamil']} ({weather_risk['risk_level_tamil']})"
+            factors.append(ScoreFactor(
+                factor=f"Weather Risk: {weather_risk['risk_type'].title()} ({weather_risk['risk_level']})",
+                impact=impact_type,
+                tamil=weather_factor_text
+            ))
         
         # Factor 1: Repayment History
         repayment_labels = ["மோசம்", "சராசரி", "நல்லது", "சிறந்தது"]
@@ -284,6 +362,8 @@ async def match_schemes(score: int = Query(..., ge=0, le=100, description="Credi
     """
     Get matching Tamil Nadu government schemes based on credit score
     
+    Dynamically reads from schemes.json file - schemes updated without server restart!
+    
     Returns top 3 matching schemes with:
     - Scheme name (in Tamil)
     - Benefit amount
@@ -292,17 +372,17 @@ async def match_schemes(score: int = Query(..., ge=0, le=100, description="Credi
     - Apply link
     """
     try:
-        # Get matching schemes
+        # Get matching schemes - reads fresh from JSON file every time
         matching_schemes = get_schemes_by_score(score, limit=3)
         
         # Format schemes for API response
         formatted_schemes = [
             SchemeInfo(
-                name=scheme['name'],
-                benefit_amount=scheme['benefit_amount'],
-                description=scheme['description'],
-                required_documents=scheme['required_documents'],
-                apply_link=scheme['apply_link']
+                name=scheme.get('name', ''),
+                benefit_amount=scheme.get('benefit_amount', ''),
+                description=scheme.get('description', ''),
+                required_documents=scheme.get('required_documents', []),
+                apply_link=scheme.get('apply_link', '')
             )
             for scheme in matching_schemes
         ]
@@ -316,6 +396,197 @@ async def match_schemes(score: int = Query(..., ge=0, le=100, description="Credi
         raise HTTPException(
             status_code=500,
             detail=f"Error fetching schemes: {str(e)}"
+        )
+
+
+@app.get("/admin/all-schemes")
+async def get_all_schemes(x_admin_password: Optional[str] = Header(None)):
+    """
+    Get all schemes from schemes.json
+    
+    Protected endpoint - requires admin password in header
+    Header: X-Admin-Password: vazhikaatti_admin_2026
+    
+    Returns:
+    - All schemes with complete details
+    - Total count
+    """
+    # Verify admin password
+    if not verify_admin_password(x_admin_password):
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden: Invalid admin password. Use header 'X-Admin-Password'"
+        )
+    
+    try:
+        schemes = load_schemes()
+        return {
+            "success": True,
+            "total_schemes": len(schemes),
+            "schemes": schemes,
+            "message": f"Successfully loaded {len(schemes)} schemes"
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error loading schemes: {str(e)}"
+        )
+
+
+@app.post("/admin/update-scheme")
+async def update_scheme(
+    scheme_data: Dict[Any, Any],
+    x_admin_password: Optional[str] = Header(None)
+):
+    """
+    Add or update a scheme in schemes.json
+    
+    Protected endpoint - requires admin password in header
+    Header: X-Admin-Password: vazhikaatti_admin_2026
+    
+    Body: Complete scheme object with fields:
+    - id: Unique scheme identifier
+    - name: Tamil name
+    - name_en: English name
+    - min_score: Minimum credit score
+    - max_score: Maximum credit score
+    - benefit_amount: Benefit amount string
+    - interest_rate: Interest rate
+    - description: Tamil description
+    - description_en: English description
+    - required_documents: List of documents
+    - apply_link: Application URL
+    
+    Auto-updates schemes.json - no server restart needed!
+    """
+    # Verify admin password
+    if not verify_admin_password(x_admin_password):
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden: Invalid admin password. Use header 'X-Admin-Password'"
+        )
+    
+    # Validate required fields
+    required_fields = ['id', 'name', 'min_score', 'max_score', 'benefit_amount', 'description']
+    missing_fields = [field for field in required_fields if field not in scheme_data]
+    
+    if missing_fields:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Missing required fields: {', '.join(missing_fields)}"
+        )
+    
+    try:
+        # Load existing schemes
+        schemes = load_schemes()
+        
+        # Check if scheme with this ID already exists
+        scheme_id = scheme_data['id']
+        existing_index = None
+        for i, scheme in enumerate(schemes):
+            if scheme.get('id') == scheme_id:
+                existing_index = i
+                break
+        
+        if existing_index is not None:
+            # Update existing scheme
+            schemes[existing_index] = scheme_data
+            action = "updated"
+        else:
+            # Add new scheme
+            schemes.append(scheme_data)
+            action = "added"
+        
+        # Save to file
+        if save_schemes(schemes):
+            return {
+                "success": True,
+                "action": action,
+                "scheme_id": scheme_id,
+                "message": f"Scheme '{scheme_data.get('name', scheme_id)}' {action} successfully",
+                "total_schemes": len(schemes)
+            }
+        else:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to save schemes to file"
+            )
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error updating scheme: {str(e)}"
+        )
+
+
+@app.get("/weather-risk")
+async def get_weather_risk(
+    district: str = Query("coimbatore", description="Tamil Nadu district name")
+):
+    """
+    Get 7-day weather forecast and farming risk assessment
+    
+    Uses Open-Meteo API (free, no API key required)
+    
+    Returns:
+    - Risk level (Low/Medium/High)
+    - Risk type (flood/drought/heat_stress/normal)
+    - 7-day forecast summary
+    - Farming advice in Tamil & English
+    - Impact on credit score
+    
+    Example: /weather-risk?district=coimbatore
+    """
+    try:
+        assessor = get_weather_assessor()
+        risk_data = assessor.assess_district_risk(district)
+        return risk_data
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error fetching weather risk: {str(e)}"
+        )
+
+
+@app.get("/crop-price-prediction")
+async def predict_crop_price(
+    crop: str = Query(..., description="Crop type (rice, banana, sugarcane, cotton, groundnut, turmeric, tomato)"),
+    season: str = Query(..., description="Season (kharif, rabi, summer)"),
+    rainfall: float = Query(..., description="Expected rainfall in mm"),
+    market_demand: float = Query(6.0, description="Market demand (1-10 scale, default 6)")
+):
+    """
+    Predict next month's crop price using AI
+    
+    Returns:
+    - Current average price in Tamil Nadu
+    - Predicted next month price
+    - Price trend (up/down/stable)
+    - Confidence percentage
+    - Best time to sell recommendation
+    
+    Example: /crop-price-prediction?crop=rice&season=kharif&rainfall=850
+    """
+    try:
+        predictor = get_predictor()
+        result = predictor.predict_price(
+            crop_type=crop,
+            season=season,
+            rainfall=rainfall,
+            market_demand=market_demand
+        )
+        return result
+    except ValueError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error predicting crop price: {str(e)}"
         )
 
 
