@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { ROUTES } from '../constants';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -7,12 +8,13 @@ const Navbar = () => {
   const location = useLocation();
 
   const navLinks = [
-    { path: '/home', label: 'Home', tamil: 'முகப்பு' },
-    { path: '/', label: 'Logout', tamil: 'வெளியேறு' },
-    { path: '/profile', label: 'Profile', tamil: 'சுயவிவரம்' },
-    { path: '/questions', label: 'Assessment', tamil: 'மதிப்பீடு' },
-    { path: '/score', label: 'Score', tamil: 'மதிப்பெண்' },
-    { path: '/schemes', label: 'Schemes', tamil: 'திட்டங்கள்' }
+    { path: ROUTES.HOME, label: 'Home', tamil: 'முகப்பு' },
+    { path: ROUTES.LOGIN, label: 'Login', tamil: 'உள்நுழைவு' },
+    { path: ROUTES.PROFILE, label: 'Profile', tamil: 'சுயவிவரம்' },
+    { path: ROUTES.QUESTIONS, label: 'Assessment', tamil: 'மதிப்பீடு' },
+    { path: ROUTES.SCORE, label: 'Score', tamil: 'மதிப்பெண்' },
+    { path: ROUTES.SCHEMES, label: 'Schemes', tamil: 'திட்டங்கள்' },
+    { path: ROUTES.OFFICER, label: 'Officer', tamil: 'அலுவலர்' }
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -23,7 +25,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         {/* Logo */}
-        <Link to="/home" className="navbar-logo">
+        <Link to={ROUTES.HOME} className="navbar-logo">
           <div className="logo-icon">
             <span className="leaf">🌾</span>
           </div>
@@ -40,11 +42,6 @@ const Navbar = () => {
               <Link
                 to={link.path}
                 className={`navbar-link ${isActive(link.path) ? 'active' : ''}`}
-                onClick={() => {
-                  if (link.path === '/') {
-                    localStorage.clear();
-                  }
-                }}
               >
                 <span className="link-label">{link.label}</span>
                 <span className="link-tamil tamil-text">{link.tamil}</span>
@@ -73,12 +70,7 @@ const Navbar = () => {
               <Link
                 to={link.path}
                 className={`navbar-mobile-link ${isActive(link.path) ? 'active' : ''}`}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  if (link.path === '/') {
-                    localStorage.clear();
-                  }
-                }}
+                onClick={() => setIsMenuOpen(false)}
               >
                 <span className="link-label">{link.label}</span>
                 <span className="link-tamil tamil-text">{link.tamil}</span>

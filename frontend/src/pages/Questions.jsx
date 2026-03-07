@@ -4,7 +4,9 @@ import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 import VoiceInput from '../components/VoiceInput';
 import AnimatedPage from '../components/AnimatedPage';
+import Toast from '../components/Toast';
 import axios from 'axios';
+import { API_ENDPOINTS, STORAGE_KEYS, ROUTES } from '../constants';
 
 const Questions = () => {
   const navigate = useNavigate();
@@ -12,6 +14,9 @@ const Questions = () => {
   const [answers, setAnswers] = useState({});
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState('info');
 
   const questions = [
     {
@@ -70,12 +75,16 @@ const Questions = () => {
 
   const submitToAPI = async (finalAnswers) => {
     setSubmitting(true);
+    setToastMessage('மதிப்பெண் கணக்கிடப்படுகிறது...');
+    setToastType('info');
+    setShowToast(true);
+    
     try {
       // Get profile data from localStorage
-      const name = localStorage.getItem('farmer_name') || '';
-      const age = parseInt(localStorage.getItem('farmer_age') || '0');
-      const village = localStorage.getItem('farmer_village') || '';
-      const district = localStorage.getItem('farmer_district') || '';
+      const name = localStorage.getItem(STORAGE_KEYS.FARMER_NAME) || '';
+      const age = parseInt(localStorage.getItem(STORAGE_KEYS.FARMER_AGE) || '0');
+      const village = localStorage.getItem(STORAGE_KEYS.FARMER_VILLAGE) || '';
+      const district = localStorage.getItem(STORAGE_KEYS.FARMER_DISTRICT) || '';
 
       // Prepare mock features for API (these should be parsed from answers in production)
       const features = {
@@ -94,17 +103,25 @@ const Questions = () => {
       };
 
       // Call predict-score API
-      const response = await axios.post('http://localhost:8000/predict-score', features);
+      const response = await axios.post(API_ENDPOINTS.PREDICT_SCORE, features);
       
       // Save score data and answers to localStorage
-      localStorage.setItem('creditScore', JSON.stringify(response.data));
-      localStorage.setItem('questionnaireAnswers', JSON.stringify(finalAnswers));
+      localStorage.setItem(STORAGE_KEYS.CREDIT_SCORE, JSON.stringify(response.data));
+      localStorage.setItem(STORAGE_KEYS.QUESTIONNAIRE_ANSWERS, JSON.stringify(finalAnswers));
       
-      // Navigate to score page
-      navigate('/score', { state: { scoreData: response.data } });
+      setToastMessage('மதிப்பெண் வெற்றிகரமாக கணக்கிடப்பட்டது! ✓');
+      setToastType('success');
+      
+      // Navigate to score page after showing success message
+      setTimeout(() => {
+        setShowToast(false);
+        navigate(ROUTES.SCORE, { state: { scoreData: response.data } });
+      }, 1500);
     } catch (error) {
       console.error('Error submitting answers:', error);
-      alert('Error calculating score. Please try again. / மதிப்பெண் கணக்கிடுவதில் பிழை. மீண்டும் முயற்சிக்கவும்.');
+      setToastMessage('பிழை! மீண்டும் முயற்சிக்கவும்.');
+      setToastType('error');
+      setTimeout(() => setShowToast(false), 3000);
     } finally {
       setSubmitting(false);
     }
@@ -114,6 +131,8 @@ const Questions = () => {
 
   return (
     <AnimatedPage>
+      <Toast message={toastMessage} type={toastType} isVisible={showToast} />
+      
       <div 
         className="min-h-screen py-8 px-4" 
         style={{ background: 'linear-gradient(135deg, #1B4332 0%, #0d2418 100%)' }}

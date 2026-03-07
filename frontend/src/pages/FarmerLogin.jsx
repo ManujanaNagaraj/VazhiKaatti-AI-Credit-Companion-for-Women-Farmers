@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Shield, Loader2 } from 'lucide-react';
 import AnimatedPage from '../components/AnimatedPage';
 import axios from 'axios';
+import { API_ENDPOINTS, STORAGE_KEYS, ROUTES } from '../constants';
 
 const FarmerLogin = () => {
   const navigate = useNavigate();
@@ -90,22 +91,22 @@ const FarmerLogin = () => {
       const aadhaarNumber = aadhaar.replace(/\s/g, '');
       
       // Call backend API
-      const response = await axios.post('http://localhost:8000/verify-aadhaar', {
+      const response = await axios.post(API_ENDPOINTS.VERIFY_AADHAAR, {
         aadhaar_number: aadhaarNumber,
         otp: otpValue
       });
 
       // Save farmer data to localStorage with individual keys
       const farmerData = response.data.farmer;
-      localStorage.setItem('farmer_name', farmerData.name);
-      localStorage.setItem('farmer_age', farmerData.age.toString());
-      localStorage.setItem('farmer_village', farmerData.village);
-      localStorage.setItem('farmer_district', farmerData.district);
-      localStorage.setItem('farmer_aadhaar', aadhaarNumber);
-      localStorage.setItem('farmer_verified', 'true');
+      localStorage.setItem(STORAGE_KEYS.FARMER_NAME, farmerData.name);
+      localStorage.setItem(STORAGE_KEYS.FARMER_AGE, farmerData.age.toString());
+      localStorage.setItem(STORAGE_KEYS.FARMER_VILLAGE, farmerData.village);
+      localStorage.setItem(STORAGE_KEYS.FARMER_DISTRICT, farmerData.district);
+      localStorage.setItem(STORAGE_KEYS.FARMER_AADHAAR, aadhaarNumber);
+      localStorage.setItem(STORAGE_KEYS.FARMER_VERIFIED, 'true');
       
       // Navigate to profile
-      navigate('/profile');
+      navigate(ROUTES.PROFILE);
     } catch (err) {
       console.error('Verification error:', err);
       setError(err.response?.data?.detail || 'Verification failed / சரிபார்ப்பு தோல்வி');
@@ -323,7 +324,7 @@ const FarmerLogin = () => {
 
           {/* Back to Home */}
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate(ROUTES.HOME)}
             className="w-full mt-4 text-center py-2"
             style={{ color: '#FAF7F0' }}
           >

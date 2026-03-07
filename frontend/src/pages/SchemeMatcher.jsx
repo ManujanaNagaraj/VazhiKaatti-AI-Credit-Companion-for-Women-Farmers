@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Award, FileText, ExternalLink, CheckCircle, IndianRupee } from 'lucide-react';
 import TamilText from '../components/TamilText';
 import AnimatedPage from '../components/AnimatedPage';
+import { STORAGE_KEYS } from '../constants';
 
 const SchemeMatcher = () => {
   const [schemes, setSchemes] = useState([]);
@@ -9,7 +10,7 @@ const SchemeMatcher = () => {
   const [selectedScheme, setSelectedScheme] = useState(null);
 
   useEffect(() => {
-    const score = parseInt(localStorage.getItem('creditScore') || '600');
+    const score = parseInt(localStorage.getItem(STORAGE_KEYS.CREDIT_SCORE) || '600');
     setCreditScore(score);
     loadSchemes(score);
   }, []);
